@@ -1,1 +1,137 @@
-<h1>Loading...</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Initiative — FFXIV Free Company on Alpha (Light)</title>
+  <meta name="description" content="Initiative is a Final Fantasy XIV Free Company on Alpha, Light Data Center. Raiding, social nights and a home for new players. Now recruiting.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <nav class="wrap nav" aria-label="Main">
+      <a class="brand" href="index.html">
+        <svg class="brand__mark" viewBox="0 0 48 48" fill="none" stroke="#c8a95e" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M24 3l18 10v22L24 45 6 35V13z"/>
+          <path d="M24 13v22M17 18l7-5 7 5"/>
+        </svg>
+        <span>
+          <span class="brand__name">Initiative</span>
+          <span class="brand__meta">Light &middot; Alpha</span>
+        </span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle menu">☰</button>
+
+      <ul class="nav__links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="roster.html">Roster</a></li>
+        <li><a href="events.html">Events</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <div class="hero__grid">
+          <div class="hero__content reveal">
+            <span class="hero__tag">Recruiting &middot; Light &middot; Alpha</span>
+            <h1>Initiative</h1>
+            <p class="hero__lead">
+              A Final Fantasy XIV Free Company built on showing up for each other — raid
+              nights when there's content to run, game and movie nights most weeks, and
+              veterans who will happily drag you through whatever you are stuck on.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--solid" href="events.html">See what's on</a>
+              <a class="btn btn--ghost" href="roster.html">Meet the roster</a>
+            </div>
+          </div>
+
+          <div class="card hero__glance reveal">
+            <h3>At a glance</h3>
+            <hr class="rule">
+
+            <div class="glance__stats">
+              <div class="glance__stat">
+                <span class="glance__value" data-fc="members">490</span>
+                <span class="glance__label">Active members</span>
+              </div>
+              <div class="glance__stat">
+                <span class="glance__value" data-fc="world">Alpha</span>
+                <span class="glance__label">World</span>
+              </div>
+              <div class="glance__stat">
+                <span class="glance__value" data-fc="dataCenter">Light</span>
+                <span class="glance__label">Data Center</span>
+              </div>
+              <div class="glance__stat">
+                <span class="glance__value" data-fc="founded">2026</span>
+                <span class="glance__label">Founded</span>
+              </div>
+            </div>
+
+            <table class="schedule glance__facts">
+              <tbody>
+                <tr><td>Free Company</td><td>Initiative &laquo;<span data-fc="tag">INIT</span>&raquo;</td></tr>
+                <tr><td>Company rank</td><td data-fc="rank">30</td></tr>
+                <tr><td>Estate</td><td data-fc="estateName">Initiative Sanctum</td></tr>
+                <tr><td>Address</td><td data-fc="estateAddress">Plot 30, 19 Ward, Mist (Medium)</td></tr>
+                <tr><td>Recruitment</td><td data-fc="recruitment">Open</td></tr>
+              </tbody>
+            </table>
+
+            <!-- Proof-of-life for the numbers above: says plainly whether they
+                 just came from a live Lodestone fetch or are a saved
+                 fallback, and when. See initLiveFc() in main.js. -->
+            <p class="stats__status" data-render="fc-status" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div>
+          <h4>Initiative</h4>
+          <p>
+            A Final Fantasy XIV Free Company on <strong>Alpha</strong>,
+            Light Data Center. Founded <span data-fc="founded">2026</span>.
+          </p>
+        </div>
+        <div>
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="roster.html">Roster</a></li>
+            <li><a href="events.html">Events</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="#" data-fc-href="discord">Discord</a></li>
+            <li><a href="#" data-fc-href="lodestone">Lodestone</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/lodestone.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

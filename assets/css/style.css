@@ -1,0 +1,937 @@
+/* ==========================================================================
+   Initiative — Free Company site
+   Light Data Center · Alpha
+   ========================================================================== */
+
+/* --- Design tokens ------------------------------------------------------ */
+:root {
+  --bg:          #0a0d16;
+  --bg-alt:      #101524;
+  --panel:       #151b2d;
+  --panel-hi:    #1c2440;
+  --line:        #26304d;
+
+  --gold:        #c8a95e;
+  --gold-bright: #ecd398;
+  --crystal:     #6fd3e8;
+
+  --text:        #dde2f0;
+  --muted:       #8c96b4;
+
+  --font-display: "Cinzel", Georgia, serif;
+  --font-body:    "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --radius: 4px;
+  --wrap: 1140px;
+}
+
+/* --- Reset -------------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a {
+  color: var(--gold-bright);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+a:hover { color: #fff; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 .5em;
+  letter-spacing: .02em;
+}
+
+h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+h3 { font-size: 1.15rem; }
+
+p { margin: 0 0 1rem; }
+
+:focus-visible {
+  outline: 2px solid var(--crystal);
+  outline-offset: 3px;
+}
+
+/* --- Layout helpers ----------------------------------------------------- */
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.section { padding-block: clamp(48px, 8vw, 88px); }
+.section--alt { background: var(--bg-alt); border-block: 1px solid var(--line); }
+
+.section-head {
+  max-width: 660px;
+  margin-bottom: 40px;
+}
+.section-head p { color: var(--muted); margin-bottom: 0; }
+
+.eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: .6rem;
+}
+
+/* Decorative gold rule under headings */
+.rule {
+  width: 64px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: 0 0 1.25rem;
+  border: 0;
+}
+
+/* --- Buttons ------------------------------------------------------------ */
+.btn {
+  display: inline-block;
+  padding: 12px 26px;
+  font-family: var(--font-body);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  color: var(--gold-bright);
+  background: transparent;
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+.btn:hover {
+  background: var(--gold);
+  color: #12160f;
+  transform: translateY(-2px);
+}
+.btn--solid {
+  background: var(--gold);
+  color: #12160f;
+}
+.btn--solid:hover { background: var(--gold-bright); color: #12160f; }
+
+.btn--ghost { border-color: var(--line); color: var(--text); }
+.btn--ghost:hover { background: var(--panel-hi); color: #fff; border-color: var(--gold); }
+
+/* --- Header / nav ------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10, 13, 22, .88);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 68px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+}
+.brand:hover { color: var(--text); }
+
+.brand__mark {
+  width: 34px;
+  height: 34px;
+  flex: none;
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.brand__meta {
+  display: block;
+  font-size: .62rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav__links a {
+  display: block;
+  padding: 8px 14px;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-radius: var(--radius);
+}
+.nav__links a:hover { color: var(--text); background: var(--panel); }
+.nav__links a.is-active { color: var(--gold-bright); }
+
+.nav__toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* --- Hero --------------------------------------------------------------- */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(460px, 76vh, 700px);
+  overflow: hidden;
+  background:
+    radial-gradient(900px 500px at 72% 12%, rgba(111, 211, 232, .14), transparent 60%),
+    radial-gradient(700px 500px at 18% 85%, rgba(200, 169, 94, .12), transparent 60%),
+    linear-gradient(180deg, #0d1322 0%, var(--bg) 100%);
+}
+
+/* Faint starfield — pure CSS, no image assets needed */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 78% 16%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 44% 62%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1.5px 1.5px at 88% 72%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 28% 80%, rgba(255,255,255,.35), transparent);
+  pointer-events: none;
+}
+
+.hero__inner { position: relative; z-index: 1; padding-block: 70px; }
+.hero__content { max-width: 620px; }
+
+.hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  margin-bottom: 22px;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--crystal);
+  border: 1px solid rgba(111, 211, 232, .35);
+  border-radius: 100px;
+  background: rgba(111, 211, 232, .07);
+}
+.hero__tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--crystal);
+  box-shadow: 0 0 10px var(--crystal);
+}
+
+.hero h1 {
+  margin-bottom: .3em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  background: linear-gradient(180deg, #fff 20%, var(--gold) 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero__lead {
+  font-size: 1.1rem;
+  color: #b9c2da;
+  margin-bottom: 2rem;
+}
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* Hero splits into intro text + a compact facts card side by side, so the
+   member count / world / rank / estate info reads as one horizontal glance
+   next to the pitch instead of a separate full-width strip further down. */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero__glance { padding: 26px 28px; }
+.hero__glance h3 { margin-bottom: 0; }
+
+.glance__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 12px;
+  margin: 16px 0 18px;
+}
+.glance__value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--gold-bright);
+  line-height: 1.1;
+}
+.glance__label {
+  display: block;
+  margin-top: 4px;
+  font-size: .62rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.glance__facts td { padding: 8px 0; font-size: .82rem; }
+
+/* Proof-of-life line under the facts above — see initLiveFc() in main.js. */
+.stats__status {
+  margin: 12px 0 0;
+  font-size: .7rem;
+  color: var(--muted);
+}
+.stats__status:empty { display: none; }
+.stats__status .is-live { color: var(--crystal); }
+
+/* --- Page banner (inner pages) ------------------------------------------ */
+.page-banner {
+  padding-block: clamp(48px, 7vw, 76px);
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(700px 320px at 20% 0%, rgba(200, 169, 94, .13), transparent 65%),
+    linear-gradient(180deg, #0d1322, var(--bg));
+}
+.page-banner p { color: var(--muted); max-width: 620px; margin-bottom: 0; }
+
+/* --- Cards -------------------------------------------------------------- */
+.grid {
+  display: grid;
+  gap: 20px;
+}
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  position: relative;
+  padding: 26px 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color .2s ease, transform .2s ease;
+}
+.card:hover { border-color: rgba(200, 169, 94, .5); transform: translateY(-3px); }
+.card p { color: var(--muted); margin-bottom: 0; }
+.card h3 { color: var(--text); }
+
+.card__icon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 16px;
+  color: var(--gold);
+}
+
+/* --- Roster ------------------------------------------------------------- */
+input[type="text"] {
+  width: 100%;
+  padding: 11px 14px;
+  font-family: inherit;
+  font-size: .92rem;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+input::placeholder { color: #66708c; }
+input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* Roster: one row of cards that wraps onto more lines when it runs out of
+   room. Cards keep a fixed width and each line is centred. */
+.wrap--wide { max-width: 1840px; }
+
+.roster-toolbar {
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+.roster-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.member {
+  width: 210px;
+  padding: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color .2s ease, background .2s ease;
+}
+.member:hover { background: var(--panel-hi); border-color: rgba(200, 169, 94, .5); }
+.portrait { display: block; color: var(--text); }
+.portrait:hover { color: var(--gold-bright); }
+
+.portrait__frame {
+  position: relative;
+  aspect-ratio: 880 / 1200;             /* Lodestone portrait size */
+  overflow: hidden;
+  border-radius: 3px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(111, 211, 232, .12), transparent 65%),
+    var(--bg-alt);
+}
+.portrait__frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.portrait:hover .portrait__frame img { transform: scale(1.04); }
+
+.portrait__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: var(--gold);
+}
+
+.portrait__name {
+  display: block;
+  padding: 10px 4px 4px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.3;
+  text-align: center;
+  transition: color .15s ease;
+}
+
+.member__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px 6px;
+  text-align: center;
+}
+.member__rank {
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.member__role {
+  font-size: .82rem;
+  line-height: 1.35;
+  color: var(--text);
+}
+.member__discord {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  font-size: .78rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.member__discord-icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: #8a93f0;                        /* muted Discord blurple */
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tag {
+  padding: 3px 9px;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  border-radius: 3px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.empty-state {
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+/* --- Calendar ------------------------------------------------------------
+   Each .cal__week is a single 7-column grid — day numbers in row 1, event
+   bars from row 2 down — so a bar's grid-column always lines up exactly
+   under its date. Every event, single- or multi-day, is a .cal__bar
+   spanning from its start day to its end day; overlapping bars land in
+   different grid-row "lanes" (see calLayoutWeek in main.js) so they never
+   collide.
+   -------------------------------------------------------------------- */
+.cal {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.cal__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.cal__nav { display: flex; align-items: center; gap: 10px; }
+.cal__nav-btn {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--panel-hi);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.cal__nav-btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+.cal__month {
+  min-width: 160px;
+  text-align: center;
+  font-family: var(--font-display);
+  letter-spacing: .04em;
+}
+.cal__today {
+  padding: 6px 14px;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.cal__today:hover { color: var(--text); border-color: var(--gold); }
+
+.cal__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--line);
+}
+.cal__filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.cal__filter.is-active {
+  color: var(--text);
+  border-color: var(--pill-color);
+  background: rgba(var(--pill-rgb), .16);
+}
+.cal__filter:not(.is-active) { opacity: .6; }
+.cal__filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pill-color);
+}
+
+.cal__grid-wrap { padding: 4px 16px 16px; }
+.cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: 4px;
+  padding-top: 12px;
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cal__weekday { text-align: center; padding-bottom: 6px; }
+
+/* One grid per week — day numbers (row 1) and bars (rows 2+) share the same
+   7 column tracks, so a bar always lines up under its date. Splitting this
+   into two separate grids caused bars to drift left of their real date. */
+.cal__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: 4px;
+  row-gap: 3px;
+  border-top: 1px solid var(--line);
+  padding: 6px 0;
+}
+.cal__cell {
+  pointer-events: none;
+  align-self: stretch;
+  justify-self: stretch;
+}
+.cal__cell--divide { border-right: 1px solid var(--line); }
+.cal__cell--today { background: rgba(200, 169, 94, .07); }
+
+.cal__daynum {
+  position: relative;
+  text-align: center;
+  padding: 2px 0 4px;
+  font-size: .8rem;
+  color: var(--muted);
+}
+.cal__daynum--outside { color: rgba(140, 150, 180, .3); }
+.cal__daynum--today {
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+.cal__bar {
+  display: block;
+  width: 100%;
+  padding: 3px 8px;
+  font: inherit;
+  font-size: .72rem;
+  line-height: 18px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+  background: rgba(var(--bar-rgb), .24);
+  border: 1px solid var(--bar-color);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.cal__bar:hover,
+.cal__bar:focus-visible { background: rgba(var(--bar-rgb), .42); }
+.cal__bar--open-start { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.cal__bar--open-end { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+
+.cal__detail { padding: 0 16px 18px; }
+.cal__detail-card {
+  position: relative;
+  padding: 16px 42px 16px 18px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+}
+.cal__detail-card h3 { margin: 8px 0 4px; font-size: 1.05rem; }
+.cal__detail-meta { margin: 0 0 8px; font-size: .8rem; color: var(--muted); }
+.cal__detail-card p:last-child { margin-bottom: 0; font-size: .88rem; color: var(--muted); }
+.cal__detail-meta small { font-size: .85em; }
+.cal__detail-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.cal__detail-close:hover { color: var(--text); }
+
+/* Mobile agenda view — hidden by default, swapped in for .cal__grid-wrap
+   under 680px (see the responsive block below). Same events as the grid,
+   as a scrollable list of cards instead of a cramped grid. */
+.cal__cards {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 16px 16px;
+}
+.cal__cards-label {
+  margin: 10px 0 2px;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cal__cards-label:first-child { margin-top: 0; }
+
+.cal__card {
+  padding: 14px 16px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--bar-color, var(--gold));
+  border-radius: var(--radius);
+}
+.cal__card--featured { background: rgba(var(--bar-rgb), .09); }
+.cal__card h3 { margin: 0 0 4px; font-size: .98rem; }
+
+.cal__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.cal__card-date {
+  font-size: .74rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+.cal__card-date--today { color: var(--gold-bright); }
+.cal__card-time { margin: 0 0 6px; font-size: .8rem; color: var(--muted); }
+.cal__card-time small { font-size: .85em; }
+.cal__card-detail { margin: 0; font-size: .85rem; color: var(--muted); }
+
+.schedule {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .92rem;
+}
+.schedule th,
+.schedule td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.schedule th {
+  font-family: var(--font-body);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.schedule tbody tr:hover { background: var(--panel); }
+.schedule td:first-child { color: var(--text); font-weight: 600; }
+.schedule td { color: var(--muted); }
+
+
+/* --- Lodestone: server maintenance + official news ---------------------- */
+.maintenance { padding-top: clamp(32px, 5vw, 48px); }
+.maintenance + .section { padding-top: clamp(32px, 5vw, 48px); }
+
+.maintenance__box {
+  padding: 18px 24px;
+  background: rgba(200, 169, 94, .06);
+  border: 1px solid rgba(200, 169, 94, .3);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+}
+.maintenance__box .eyebrow { margin-bottom: 8px; }
+
+.notice {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 6px 16px;
+  padding: 10px 0;
+  color: var(--text);
+  border-top: 1px solid var(--line);
+}
+.notice:first-child { border-top: 0; }
+.notice:hover { color: var(--gold-bright); }
+
+.notice__status {
+  padding: 3px 8px;
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+.notice__status.is-live {
+  color: var(--crystal);
+  border-color: rgba(111, 211, 232, .45);
+}
+.notice__title { font-weight: 600; }
+.notice__time {
+  font-size: .88rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.notice__time small { font-size: .72rem; }
+
+/* --- Footer ------------------------------------------------------------- */
+.site-footer {
+  padding-block: 44px 28px;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  font-size: .88rem;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.site-footer h4 {
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li { margin-bottom: 8px; }
+.site-footer a { color: var(--muted); }
+.site-footer a:hover { color: var(--gold-bright); }
+.site-footer p { color: var(--muted); }
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 22px;
+  color: #6a7492;
+  font-size: .78rem;
+}
+
+/* --- Motion ------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* --- Responsive --------------------------------------------------------- */
+@media (max-width: 900px) {
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__glance { max-width: 480px; }
+}
+
+@media (max-width: 680px) {
+  .nav__toggle { display: block; }
+
+  .nav__links {
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 20px 16px;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__links:not(.is-open) { display: none; }
+  .nav__links a { padding: 12px 8px; }
+
+  .grid--4 { grid-template-columns: 1fr; }
+
+  .roster-grid { gap: 12px; }
+  .member { width: calc(50% - 6px); padding: 6px; }
+  .portrait__name { font-size: .85rem; }
+  .member__role { font-size: .76rem; }
+
+  .cal__toolbar { flex-wrap: wrap; }
+  .cal__month { min-width: 0; }
+
+  /* Grid becomes cards below this width — a 7-column grid can't fit
+     anything readable on a phone screen. */
+  .cal__grid-wrap,
+  .cal__detail { display: none; }
+  .cal__cards { display: flex; }
+  .cal__hint-grid-only { display: none; }
+
+  .notice { grid-template-columns: 1fr; }
+  .notice__status { justify-self: start; }
+  .notice__time { white-space: normal; }
+}
