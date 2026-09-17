@@ -65,14 +65,15 @@ const MEMBERS = [
    just falls back to gold.
 -------------------------------------------------------------------------- */
 const EVENT_TYPE_COLORS = {
-  Raid:         '#e0665c',
-  Social:       '#6fd3e8',
-  Newbie:       '#7cc576',
-  Event:        '#c8a95e',
-  FF14:         '#b18cf0',
-  'Game Night': '#e8944a',
-  Movie:        '#5c8ce0',
-  'FC Month':   '#e06ba8'
+  Raid:            '#e0665c',
+  Social:          '#6fd3e8',
+  Newbie:          '#7cc576',
+  Event:           '#c8a95e',
+  FF14:            '#b18cf0',
+  'Game Night':    '#e8944a',
+  Movie:           '#5c8ce0',
+  'FC Month':      '#e06ba8',
+  'Treasure Maps': '#2fb8a3'
 };
 
 /* --- Upcoming events -----------------------------------------------------
@@ -121,7 +122,7 @@ const EVENTS = [
     date: '2026-09-19',
     time: '20:00 ST',
     title: 'Reels & Riches',
-    type: 'Social',
+    type: 'Treasure Maps',
     detail: 'International Talk Like a Pirate Day — ocean fishing and treasure maps. Bring at least 2 treasure maps, and complete the Ocean Fishing unlock quest beforehand. All fishing levels welcome!'
   },
   {
@@ -155,6 +156,12 @@ const EVENTS = [
     time: '20:00 ST',
     title: 'The Binding Coil of Bahamut',
     type: 'Raid'
+  },
+  {
+    date: '2026-09-30',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
   }
 ];
 
