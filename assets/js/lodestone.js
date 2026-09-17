@@ -162,6 +162,110 @@ var Lodestone = (function () {
     return list.length ? list : null;
   }
 
+  // The Lodestone shows up to 50 members per page — a full page back means
+  // there's likely another one after it, so the whole-roster fetch below
+  // keeps going until a page comes back short.
+  var MEMBER_PAGE_SIZE = 50;
+  var MEMBER_MAX_PAGES = 20;
+
+  // Every member across the whole FC, not just the first page — used by the
+  // Members page. Pages through the member list until one comes back short
+  // (the last page) or a page fails outright, so a mid-way hiccup still
+  // returns everything fetched so far instead of nothing.
+  function loadAllMembers() {
+    var all  = [];
+    var seen = {};
+
+    function addPage(list) {
+      list.forEach(function (m) {
+        var key = m.id || m.name;
+        if (!seen[key]) { seen[key] = true; all.push(m); }
+      });
+    }
+
+    function next(page) {
+      return load(fcUrl('member/?page=' + page), parseMembers).then(function (list) {
+        if (!list || !list.length) return all;
+        addPage(list);
+        if (list.length < MEMBER_PAGE_SIZE || page >= MEMBER_MAX_PAGES) return all;
+        return next(page + 1);
+      });
+    }
+
+    return next(1).then(function (result) {
+      if (!result.length) throw new Error('No members parsed');
+      return result;
+    }, function (err) {
+      if (all.length) return all;
+      throw err;
+    });
+  }
+
+  /* ---- Class/Job levels (Combat/Gatherer/Crafter tags on the Members
+     page) ------------------------------------------------------------------
+     A member's FC entry doesn't include job levels, so this fetches their
+     own character page separately, one at a time, in the background. Jobs
+     are matched by name rather than by position in the page, since that's
+     stable even if the Lodestone's layout isn't. */
+  var GATHERER_JOBS = ['Miner', 'Botanist', 'Fisher'];
+  var CRAFTER_JOBS = [
+    'Carpenter', 'Blacksmith', 'Armorer', 'Goldsmith',
+    'Leatherworker', 'Weaver', 'Alchemist', 'Culinarian'
+  ];
+  var COMBAT_JOBS = [
+    'Gladiator', 'Marauder', 'Dark Knight', 'Gunbreaker', 'Paladin', 'Warrior',
+    'Conjurer', 'White Mage', 'Scholar', 'Astrologian', 'Sage',
+    'Pugilist', 'Lancer', 'Rogue', 'Monk', 'Dragoon', 'Ninja', 'Samurai', 'Reaper', 'Viper', 'Beastmaster',
+    'Archer', 'Bard', 'Machinist', 'Dancer',
+    'Thaumaturge', 'Summoner', 'Arcanist', 'Red Mage', 'Pictomancer', 'Blue Mage', 'Black Mage'
+  ];
+  // Longest name first, so "Dark Knight" is matched before a shorter name
+  // that might otherwise be found inside it.
+  var TRACKED_JOBS = GATHERER_JOBS.concat(CRAFTER_JOBS, COMBAT_JOBS)
+    .sort(function (a, b) { return b.length - a.length; });
+
+  function characterUrl(id) {
+    var m = /^(https:\/\/[a-z]+\.finalfantasyxiv\.com\/lodestone\/)/.exec(String(FC.lodestone || ''));
+    var base = m ? m[1] : 'https://eu.finalfantasyxiv.com/lodestone/';
+    return base + 'character/' + id + '/class_job/';
+  }
+
+  // The Lodestone lists each job as "<level> <job name> <exp>" inside its
+  // own list item — the level always comes right before the job's name.
+  function parseJobLevels(doc) {
+    var items = doc.querySelectorAll('li');
+    if (!items.length) return null;   // not a real page — a proxy error, most likely
+
+    var levels = {};
+    for (var i = 0; i < items.length; i++) {
+      var t = text(items[i]);
+      if (!t) continue;
+
+      for (var j = 0; j < TRACKED_JOBS.length; j++) {
+        var job = TRACKED_JOBS[j];
+        var idx = t.indexOf(job);
+        if (idx === -1) continue;
+
+        var m = /(\d{1,3})\s*$/.exec(t.slice(0, idx).trim());
+        if (!m) break;
+
+        var level = parseInt(m[1], 10);
+        if (level > (levels[job] || 0)) levels[job] = level;
+        break;
+      }
+    }
+
+    return levels;
+  }
+
+  function classifyJobLevels(levels) {
+    return {
+      combat90:   COMBAT_JOBS.some(function (j) { return (levels[j] || 0) >= 90; }),
+      gatherer90: GATHERER_JOBS.some(function (j) { return (levels[j] || 0) >= 90; }),
+      crafter90:  CRAFTER_JOBS.some(function (j) { return (levels[j] || 0) >= 90; })
+    };
+  }
+
   /* ---- Official news + maintenance (lodestonenews.com) ----------------- */
   function fetchNews(feed) {
     return fetchText(NEWS_API + feed + '?locale=eu', null, 10000).then(function (body) {
@@ -234,6 +338,18 @@ var Lodestone = (function () {
     },
     members: function (onData, onError) {
       get('members', CACHE_MINUTES, function () { return load(fcUrl('member/'), parseMembers); }, onData, onError);
+    },
+    // The whole FC roster in one go (paged through internally), for the
+    // Members page — which then paginates the display of it client-side.
+    allMembers: function (onData, onError) {
+      get('members-all', CACHE_MINUTES, function () { return loadAllMembers(); }, onData, onError);
+    },
+    // A single character's job levels, classified down to the three
+    // booleans the Members page tags need. Cached per character.
+    classJob: function (id, onData, onError) {
+      get('classjob-' + id, CACHE_MINUTES, function () {
+        return load(characterUrl(id), parseJobLevels).then(classifyJobLevels);
+      }, onData, onError);
     },
     maintenance: function (onData, onError) {
       get('maintenance', NEWS_CACHE_MINUTES, function () { return fetchNews('maintenance').then(cleanMaintenance); }, onData, onError);

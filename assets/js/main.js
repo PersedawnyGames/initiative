@@ -240,6 +240,226 @@
     }
   }
 
+  /* ---- Members page: everyone below Council, live from the Lodestone ---
+     The whole roster is fetched once in the background (Lodestone.allMembers
+     pages through it internally), then paginated for display client-side —
+     so flipping pages here is instant, and filtering/sorting can see
+     everyone rather than just whatever page happens to be loaded.
+
+     Sorted by rank then name: the Lodestone always returns members ranked
+     highest-first, so the rank order they arrive in is used as-is (rather
+     than hard-coding this FC's specific rank names), with an alphabetical
+     sort by name inside each rank.
+
+     Once the roster is in, job levels are looked up one character page at a
+     time (a few at once, not all ~490 simultaneously) to tag anyone with a
+     level 90+ combat job, gatherer or crafter. That's a lot of extra
+     requests through the same proxies, so tags fill in gradually — a filter
+     applied before they've all landed will only match whoever's been
+     checked so far. ---------------------------------------------------- */
+  function renderAllMembers() {
+    var host       = $('[data-render="all-members"]');
+    if (!host) return;
+
+    var search     = $('#members-search');
+    var count      = $('[data-members-count]');
+    var pageLabel  = $('[data-members-page-label]');
+    var prevBtn    = $('[data-members-nav="prev"]');
+    var nextBtn    = $('[data-members-nav="next"]');
+    var filtersEl  = $('[data-members-filters]');
+    var progressEl = $('[data-members-progress]');
+
+    var excluded = {};
+    if (typeof RANKS !== 'undefined') {
+      RANKS.forEach(function (r) { excluded[r.name] = true; });
+    }
+
+    var TAGS = [
+      { key: 'combat90',   label: 'Combat',   color: '#e0665c' },
+      { key: 'gatherer90', label: 'Gatherer', color: '#7cc576' },
+      { key: 'crafter90',  label: 'Crafter',  color: '#e8944a' }
+    ];
+    var PAGE_SIZE = 50;
+
+    var all     = null;    // full sorted list, or null until the first fetch lands
+    var failed  = false;
+    var page    = 1;
+    var active  = {};      // tag key -> true while that filter pill is on
+    var checked = 0;       // how many members have a job-level result so far
+
+    function matches(m, q) {
+      return !q || (m.name + ' ' + m.rank).toLowerCase().indexOf(q) !== -1;
+    }
+
+    function activeKeys() {
+      return TAGS.map(function (t) { return t.key; }).filter(function (k) { return active[k]; });
+    }
+
+    function passesFilters(m) {
+      var keys = activeKeys();
+      if (!keys.length) return true;
+      var info = m.jobInfo || {};
+      return keys.some(function (k) { return info[k]; });
+    }
+
+    // Rank order comes from the Lodestone's own sort (highest rank first)
+    // rather than a hard-coded list of this FC's rank names, so it keeps
+    // working if custom ranks are ever renamed or reordered in-game.
+    function sortByRankThenName(list) {
+      var order = {};
+      var next  = 0;
+      list.forEach(function (m) {
+        if (!(m.rank in order)) order[m.rank] = next++;
+      });
+      return list.slice().sort(function (a, b) {
+        return (order[a.rank] - order[b.rank]) || a.name.localeCompare(b.name);
+      });
+    }
+
+    function jobTagsHtml(info) {
+      if (!info) return '';
+      return TAGS.map(function (t) {
+        return info[t.key]
+          ? '<span class="tag" style="color:' + t.color + ';border-color:' + t.color + '">' + t.label + '</span>'
+          : '';
+      }).join('');
+    }
+
+    function memberMiniMarkup(m) {
+      return '<div class="member-mini" data-member-id="' + esc(m.id) + '">' +
+               '<span class="member-mini__name">' + esc(m.name) + '</span>' +
+               '<span class="member-mini__rank">' + esc(m.rank) + '</span>' +
+               '<div class="member-mini__tags" data-member-tags>' + jobTagsHtml(m.jobInfo) + '</div>' +
+             '</div>';
+    }
+
+    function drawFilters() {
+      if (!filtersEl) return;
+      filtersEl.innerHTML = TAGS.map(function (t) {
+        var on = !!active[t.key];
+        return '<button type="button" class="cal__filter' + (on ? ' is-active' : '') + '" ' +
+                 'data-members-filter="' + t.key + '" aria-pressed="' + on + '" ' +
+                 'style="--pill-color:' + t.color + ';--pill-rgb:' + calHexToRgb(t.color) + '">' +
+                 '<span class="cal__filter-dot"></span>' + t.label +
+               '</button>';
+      }).join('');
+    }
+
+    function draw() {
+      if (all === null) {
+        host.innerHTML = '<div class="empty-state">' + (failed
+          ? 'Couldn’t reach the Lodestone right now — try again shortly, or see the full ' +
+            '<a href="' + (typeof FC !== 'undefined' ? FC.lodestone + 'member/' : '#') +
+            '" target="_blank" rel="noopener">member list on the Lodestone</a>.'
+          : 'Loading members from the Lodestone… this pages through the whole roster, so it can take a little while.'
+        ) + '</div>';
+        if (count) count.textContent = '';
+        if (pageLabel) pageLabel.textContent = 'Page 1';
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = true;
+        if (progressEl) progressEl.textContent = '';
+        return;
+      }
+
+      var q       = (search && search.value || '').trim().toLowerCase();
+      var visible = all.filter(function (m) { return matches(m, q) && passesFilters(m); });
+
+      var totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+      if (page > totalPages) page = totalPages;
+
+      var pageItems = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+      host.innerHTML = pageItems.length
+        ? '<div class="member-mini-grid">' + pageItems.map(memberMiniMarkup).join('') + '</div>'
+        : '<div class="empty-state">No members match' + ((q || activeKeys().length) ? ' this search or filter.' : '.') + '</div>';
+
+      if (count) {
+        count.textContent = visible.length + (visible.length === 1 ? ' member' : ' members') +
+          (visible.length !== all.length ? ' (of ' + all.length + ' total)' : '');
+      }
+
+      if (pageLabel) pageLabel.textContent = 'Page ' + page + ' of ' + totalPages;
+      if (prevBtn) prevBtn.disabled = page <= 1;
+      if (nextBtn) nextBtn.disabled = page >= totalPages;
+
+      if (progressEl) {
+        progressEl.textContent = checked < all.length
+          ? 'Checking job levels… ' + checked + ' of ' + all.length
+          : '';
+      }
+    }
+
+    // A handful of lookups in flight at once, not all ~490 simultaneously —
+    // kinder to the free proxies, and no less useful since tags (and any
+    // filter watching for them) fill in as each one lands.
+    function fetchJobTags(list) {
+      if (typeof Lodestone === 'undefined') return;
+      var queue = list.filter(function (m) { return !m.jobInfo && /^\d+$/.test(m.id || ''); });
+      if (!queue.length) return;
+
+      var CONCURRENCY = 5;
+      var inFlight     = CONCURRENCY;
+      var dirty        = false;
+      var progressTimer = setInterval(function () {
+        if (dirty) { dirty = false; draw(); }
+      }, 500);
+
+      function settle(m, info) {
+        m.jobInfo = info;
+        checked++;
+        dirty = true;
+        var el = host.querySelector('.member-mini[data-member-id="' + m.id + '"] [data-member-tags]');
+        if (el) el.innerHTML = jobTagsHtml(info);
+        next();
+      }
+
+      function next() {
+        var m = queue.shift();
+        if (!m) {
+          inFlight--;
+          if (inFlight <= 0) { clearInterval(progressTimer); draw(); }
+          return;
+        }
+        Lodestone.classJob(m.id, function (info) { settle(m, info || {}); }, function () { settle(m, {}); });
+      }
+
+      for (var i = 0; i < CONCURRENCY; i++) next();
+    }
+
+    function load() {
+      if (typeof Lodestone === 'undefined') return;
+      failed = false;
+      draw();
+      Lodestone.allMembers(function (list) {
+        var filtered = (list || []).filter(function (m) { return !excluded[m.rank]; });
+        all  = sortByRankThenName(filtered);
+        page = 1;
+        draw();
+        fetchJobTags(all);
+      }, function () {
+        failed = true;
+        draw();
+      });
+    }
+
+    drawFilters();
+    draw();
+    load();
+
+    if (search) search.addEventListener('input', function () { page = 1; draw(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { page--; draw(); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { page++; draw(); });
+    if (filtersEl) filtersEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-members-filter]');
+      if (!btn) return;
+      var key = btn.getAttribute('data-members-filter');
+      active[key] = !active[key];
+      page = 1;
+      drawFilters();
+      draw();
+    });
+  }
+
   /* ---- Events page: server maintenance from the Lodestone -------------- */
   var DAY_FORMAT  = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
   var TIME_FORMAT = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit' });
@@ -744,6 +964,7 @@
     initLiveFc();
     renderActivities();
     renderRoster();
+    renderAllMembers();
     renderMaintenance();
     renderCalendar();
     initYear();

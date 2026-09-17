@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roster — Initiative</title>
-  <meta name="description" content="The members of Initiative, a FFXIV Free Company on Alpha, Light Data Center.">
+  <title>Members — Initiative</title>
+  <meta name="description" content="The full member list of Initiative, a FFXIV Free Company on Alpha, Light Data Center.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,11 +42,14 @@
     <section class="page-banner">
       <div class="wrap">
         <span class="eyebrow">The company</span>
-        <h1 style="font-size:clamp(1.9rem,5vw,2.8rem);">Roster</h1>
+        <h1 style="font-size:clamp(1.9rem,5vw,2.8rem);">Members</h1>
         <hr class="rule">
         <p>
-          The Emperor, Regents and Council members of Initiative. See the
-          <a href="members.html">Members</a> page for the rest of the FC.
+          Everyone in Initiative outside of leadership — see the
+          <a href="roster.html">Roster</a> page for The Emperor, Regents and Council.
+          Sorted by rank, then name, and browsed a page at a time, same as the Lodestone.
+          Anyone with a level 90+ combat job, gatherer or crafter gets a tag for it, filterable
+          below — no portraits yet.
         </p>
       </div>
     </section>
@@ -54,11 +57,20 @@
     <section class="section">
       <div class="wrap wrap--wide">
         <div class="roster-toolbar">
-          <label for="roster-search" class="sr-only">Search the roster</label>
-          <input type="text" id="roster-search" placeholder="Search name, rank, role or Discord…" autocomplete="off">
+          <label for="members-search" class="sr-only">Search members</label>
+          <input type="text" id="members-search" placeholder="Search by name or rank…" autocomplete="off">
+          <div class="members-filters" data-members-filters role="group" aria-label="Filter by tag"></div>
+          <p class="members-count" data-members-count aria-live="polite"></p>
+          <p class="members-progress" data-members-progress aria-live="polite"></p>
         </div>
 
-        <div data-render="roster" aria-live="polite"></div>
+        <div data-render="all-members" aria-live="polite"></div>
+
+        <div class="members-pager">
+          <button type="button" class="cal__nav-btn" data-members-nav="prev" aria-label="Previous page">&lsaquo;</button>
+          <span class="members-pager__label" data-members-page-label>Page 1</span>
+          <button type="button" class="cal__nav-btn" data-members-nav="next" aria-label="Next page">&rsaquo;</button>
+        </div>
       </div>
     </section>
   </main>
