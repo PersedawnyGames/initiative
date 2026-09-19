@@ -169,6 +169,105 @@ const EVENTS = [
     time: '20:00 ST',
     title: 'Treasure Maps',
     type: 'Treasure Maps'
+  },
+  {
+    date: '2026-10-02',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-10-04',
+    time: '20:00 ST',
+    title: 'Sunday Movie Night — TBA',
+    type: 'Movie',
+    detail: 'Film to be announced closer to the date — check Discord for the pick.'
+  },
+  {
+    date: '2026-10-09',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-10-10',
+    time: '20:00 ST',
+    title: 'Alexander Raids',
+    type: 'Raid'
+  },
+  {
+    date: '2026-10-10',
+    title: '???',
+    type: 'Event'
+  },
+  {
+    date: '2026-10-11',
+    time: '20:00 ST',
+    title: 'Sunday Movie Night — TBA',
+    type: 'Movie',
+    detail: 'Film to be announced closer to the date — check Discord for the pick.'
+  },
+  {
+    date: '2026-10-14',
+    time: '20:00 ST',
+    title: 'Sprout Night',
+    type: 'Raid',
+    detail: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.'
+  },
+  {
+    date: '2026-10-16',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-10-17',
+    time: '20:00 ST',
+    title: 'Sky Pirates',
+    type: 'Raid'
+  },
+  {
+    date: '2026-10-18',
+    time: '20:00 ST',
+    title: 'Sunday Movie Night — TBA',
+    type: 'Movie',
+    detail: 'Film to be announced closer to the date — check Discord for the pick.'
+  },
+  {
+    date: '2026-10-21',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
+  },
+  {
+    date: '2026-10-23',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-10-24',
+    time: '20:00 ST',
+    title: '???',
+    type: 'Event'
+  },
+  {
+    date: '2026-10-25',
+    time: '20:00 ST',
+    title: 'Sunday Movie Night — TBA',
+    type: 'Movie',
+    detail: 'Film to be announced closer to the date — check Discord for the pick.'
+  },
+  {
+    date: '2026-10-30',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-10-31',
+    title: '???',
+    type: 'Event'
   }
 ];
 
