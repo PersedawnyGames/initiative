@@ -197,6 +197,7 @@ const EVENTS = [
   },
   {
     date: '2026-10-10',
+    time: '20:00 ST',
     title: '???',
     type: 'Event'
   },
@@ -248,8 +249,8 @@ const EVENTS = [
   {
     date: '2026-10-24',
     time: '20:00 ST',
-    title: '???',
-    type: 'Event'
+    title: 'Stormblood Mount Farm',
+    type: 'Raid'
   },
   {
     date: '2026-10-25',
