@@ -224,8 +224,8 @@ const EVENTS = [
   {
     date: '2026-10-17',
     time: '20:00 ST',
-    title: '???',
-    type: 'Event'
+    title: 'Hide and Seek in Gridania',
+    type: 'Social'
   },
   {
     date: '2026-10-18',
