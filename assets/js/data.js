@@ -177,6 +177,12 @@ const EVENTS = [
     type: 'Game Night'
   },
   {
+    date: '2026-10-03',
+    time: '20:00 ST',
+    title: 'Alexander Raids',
+    type: 'Raid'
+  },
+  {
     date: '2026-10-04',
     time: '20:00 ST',
     title: 'Sunday Movie Night — TBA',
@@ -192,14 +198,8 @@ const EVENTS = [
   {
     date: '2026-10-10',
     time: '20:00 ST',
-    title: 'Alexander Raids',
+    title: 'Sky Pirates',
     type: 'Raid'
-  },
-  {
-    date: '2026-10-10',
-    time: '20:00 ST',
-    title: '???',
-    type: 'Event'
   },
   {
     date: '2026-10-11',
@@ -224,8 +224,8 @@ const EVENTS = [
   {
     date: '2026-10-17',
     time: '20:00 ST',
-    title: 'Sky Pirates',
-    type: 'Raid'
+    title: '???',
+    type: 'Event'
   },
   {
     date: '2026-10-18',
