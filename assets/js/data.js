@@ -142,7 +142,14 @@ const EVENTS = [
     date: '2026-09-25',
     time: '20:00 ST',
     title: 'Friendslop Friday',
-    type: 'Game Night'
+    type: 'Game Night',
+    detail: 'Jackbox / free game night.'
+  },
+  {
+    date: '2026-09-27',
+    time: '19:00 ST',
+    title: 'Unholy Banana & Serinah Starweaver’s Wedding',
+    type: 'Event'
   },
   {
     date: '2026-09-27',
