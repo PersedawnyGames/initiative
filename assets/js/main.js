@@ -121,6 +121,32 @@
     }).join('');
   }
 
+  /* ---- Events: Sprout Night content log --------------------------------- */
+  function renderSproutNight() {
+    var host = $('[data-render="sprout-night"]');
+    if (!host || typeof SPROUT_NIGHT_CONTENT === 'undefined') return;
+
+    if (!SPROUT_NIGHT_CONTENT.length) {
+      host.innerHTML = '<div class="empty-state">Nothing logged yet.</div>';
+      return;
+    }
+
+    host.innerHTML = SPROUT_NIGHT_CONTENT.map(function (group) {
+      var items = group.items || [];
+      return '<div class="sprout-log__group">' +
+               '<div class="sprout-log__label">' + esc(group.category) + '</div>' +
+               '<ul class="sprout-log__list">' +
+                 items.map(function (title) {
+                   return '<li class="sprout-log__item">' +
+                            icon('sword') +
+                            '<span>' + esc(title) + '</span>' +
+                          '</li>';
+                 }).join('') +
+               '</ul>' +
+             '</div>';
+    }).join('');
+  }
+
   /* ---- Roster (live from the Lodestone, with search) ------------------- */
   function renderRoster() {
     var host = $('[data-render="roster"]');
@@ -967,6 +993,7 @@
     renderAllMembers();
     renderMaintenance();
     renderCalendar();
+    renderSproutNight();
     initYear();
     initReveal();   // last: everything rendered above is now in the DOM
   });

@@ -869,6 +869,41 @@ input:focus {
 .schedule td { color: var(--muted); }
 
 
+/* --- Events: Sprout Night content log ------------------------------------ */
+.sprout-log {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px 48px;
+}
+.sprout-log__label {
+  margin: 0 0 10px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.sprout-log__list {
+  display: flex;
+  flex-direction: column;
+}
+.sprout-log__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+.sprout-log__item:last-child { border-bottom: none; }
+.sprout-log__item .card__icon {
+  width: 15px;
+  height: 15px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
 /* --- Lodestone: server maintenance + official news ---------------------- */
 .maintenance { padding-top: clamp(32px, 5vw, 48px); }
 .maintenance + .section { padding-top: clamp(32px, 5vw, 48px); }

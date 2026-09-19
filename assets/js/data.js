@@ -295,3 +295,19 @@ const ACTIVITIES = [
     text: 'A stocked FC chest, active buffs, a workshop, and a monthly FC Room Competition and FC Bingo to keep things interesting.'
   }
 ];
+
+/* --- Sprout Night content log --------------------------------------------
+   Shown on the Events page under the calendar — a running list of what
+   we've already covered on Sprout Night, grouped by category. Add a new
+   item to a category's list, or a whole new category, as we go.
+-------------------------------------------------------------------------- */
+const SPROUT_NIGHT_CONTENT = [
+  {
+    category: 'Extremes',
+    items: ['A Realm Reborn', 'Heavensward']
+  },
+  {
+    category: 'Deep Dungeons',
+    items: ['Palace of the Dead']
+  }
+];
