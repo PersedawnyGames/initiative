@@ -154,9 +154,9 @@ const EVENTS = [
   {
     date: '2026-09-27',
     time: '20:00 ST',
-    title: 'Sunday Movie Night — TBA',
+    title: 'Sunday Movie Night — Nimona',
     type: 'Movie',
-    detail: 'Film to be announced closer to the date — check Discord for the pick.'
+    detail: 'This week’s pick: Nimona (2023) — a knight framed for a crime he didn’t commit teams up with a shape-shifting outcast to clear his name and take down the kingdom that betrayed them both.'
   },
   {
     date: '2026-09-26',
