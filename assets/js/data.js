@@ -113,6 +113,13 @@ const EVENTS = [
     detail: 'Official seasonal event, first of a two-part special tied to the Evercold expansion. Earn irregular tomestones from duties and complete minimog/ultimog challenges for a shot at the Uolon horn mount. Runs 9 Sep, 8:00 GMT – 19 Oct, 14:59 GMT.'
   },
   {
+    date: '2026-09-24',
+    endDate: '2026-10-13',
+    title: 'A Nocturne for Heroes: FFXIV x FFXV',
+    type: 'FF14',
+    detail: 'Official crossover event with Final Fantasy XV returns. Requires level 50 and the MSQ "The Ultimate Weapon" (A Realm Reborn) completed — start "The Man in Black" from Kipih Jakkya in Ul’dah, Old Steps of Nald. Rewards include the 4-seat Regalia Type-G mount (200,000 MGP), the Lucian Prince (Noctis) attire from the quests, the Modern Aesthetics – Lucian Locks hairstyle (20,000 MGP), a Noctis Triple Triad card (10,000 MGP), and FFXV orchestrion rolls. Runs 24 Sep, 8:00 GMT – 13 Oct, 14:59 GMT.'
+  },
+  {
     date: '2026-09-18',
     time: '20:00 ST',
     title: 'Friendslop Friday',
