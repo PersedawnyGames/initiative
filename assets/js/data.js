@@ -216,7 +216,7 @@ const EVENTS = [
     detail: 'Film to be announced closer to the date — check Discord for the pick.'
   },
   {
-    date: '2026-10-14',
+    date: '2026-10-07',
     time: '20:00 ST',
     title: 'Sprout Night',
     type: 'Raid',
@@ -242,7 +242,7 @@ const EVENTS = [
     detail: 'Film to be announced closer to the date — check Discord for the pick.'
   },
   {
-    date: '2026-10-21',
+    date: '2026-10-14',
     time: '20:00 ST',
     title: 'Treasure Maps',
     type: 'Treasure Maps'
@@ -267,6 +267,12 @@ const EVENTS = [
     detail: 'Film to be announced closer to the date — check Discord for the pick.'
   },
   {
+    date: '2026-10-28',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
+  },
+  {
     date: '2026-10-30',
     time: '20:00 ST',
     title: 'Friendslop Friday',
@@ -276,6 +282,13 @@ const EVENTS = [
     date: '2026-10-31',
     title: '???',
     type: 'Event'
+  },
+  {
+    date: '2026-11-04',
+    time: '20:00 ST',
+    title: 'Sprout Night',
+    type: 'Raid',
+    detail: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.'
   }
 ];
 
@@ -316,5 +329,9 @@ const SPROUT_NIGHT_CONTENT = [
   {
     category: 'Deep Dungeons',
     items: ['Palace of the Dead']
+  },
+  {
+    category: 'Raids',
+    items: ['The Binding Coil of Bahamut']
   }
 ];
