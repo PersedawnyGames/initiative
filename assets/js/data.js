@@ -186,8 +186,8 @@ const EVENTS = [
   {
     date: '2026-10-03',
     time: '20:00 ST',
-    title: 'Alexander Raids',
-    type: 'Raid'
+    title: '???',
+    type: 'Event'
   },
   {
     date: '2026-10-04',
@@ -205,7 +205,7 @@ const EVENTS = [
   {
     date: '2026-10-10',
     time: '20:00 ST',
-    title: 'Sky Pirates',
+    title: 'Alexander Raids',
     type: 'Raid'
   },
   {
