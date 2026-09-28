@@ -186,15 +186,16 @@ const EVENTS = [
   {
     date: '2026-10-03',
     time: '20:00 ST',
-    title: '???',
-    type: 'Event'
+    title: 'From Mahjong to Minions: Gold Saucer Night',
+    type: 'Event',
+    detail: 'Join INIT for a relaxed evening of learning and playing together! Choose the games you’d like to explore: Triple Triad, Doman Mahjong, Lord of Verminion, or Chocobo Racing.'
   },
   {
     date: '2026-10-04',
     time: '20:00 ST',
-    title: 'Sunday Movie Night — TBA',
+    title: 'Sunday Movie Night — Weathering With You',
     type: 'Movie',
-    detail: 'Film to be announced closer to the date — check Discord for the pick.'
+    detail: 'This week’s pick: Weathering With You (2019) — a runaway teen in Tokyo befriends a girl with the mysterious power to part the clouds, and the two turn her gift into a business as an unusually rainy summer pushes their world toward its breaking point.'
   },
   {
     date: '2026-10-09',
