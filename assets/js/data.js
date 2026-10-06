@@ -106,6 +106,12 @@ const EVENTS = [
     type: 'FC Month'
   },
   {
+    date: '2026-10-01',
+    endDate: '2026-10-31',
+    title: 'FFXIV HALLOWEEN & COSTUME PHOTO CHALLENGE',
+    type: 'FC Month'
+  },
+  {
     date: '2026-09-09',
     endDate: '2026-10-19',
     title: 'Moogle Treasure Trove: The First Hunt for Astronomy',
@@ -118,6 +124,13 @@ const EVENTS = [
     title: 'A Nocturne for Heroes: FFXIV x FFXV',
     type: 'FF14',
     detail: 'Official crossover event with Final Fantasy XV returns. Requires level 50 and the MSQ "The Ultimate Weapon" (A Realm Reborn) completed — start "The Man in Black" from Kipih Jakkya in Ul’dah, Old Steps of Nald. Rewards include the 4-seat Regalia Type-G mount (200,000 MGP), the Lucian Prince (Noctis) attire from the quests, the Modern Aesthetics – Lucian Locks hairstyle (20,000 MGP), a Noctis Triple Triad card (10,000 MGP), and FFXV orchestrion rolls. Runs 24 Sep, 8:00 GMT – 13 Oct, 14:59 GMT.'
+  },
+  {
+    date: '2026-10-07',
+    endDate: '2026-10-27',
+    title: 'FFXIV x Fall Guys Collaboration',
+    type: 'FF14',
+    detail: 'Official crossover event returns. Requires level 15 and one of the early MSQ quests "The Gridanian Envoy", "The Ul’dahn Envoy" or "The Lominsan Envoy" — start "Just Crowning Around" from Lewena at the Gold Saucer. Join Blunderville shows to earn Manderville Gold Saucer Fame (MGF) and exchange it for Fall Guys-themed outfits, Winner’s Crowns, furnishings and an orchestrion roll (MGF can only be earned during the event). Runs 7 Oct, 8:00 GMT – 27 Oct, 14:59 GMT.'
   },
   {
     date: '2026-09-18',
@@ -198,32 +211,6 @@ const EVENTS = [
     detail: 'This week’s pick: Weathering With You (2019) — a runaway teen in Tokyo befriends a girl with the mysterious power to part the clouds, and the two turn her gift into a business as an unusually rainy summer pushes their world toward its breaking point.'
   },
   {
-    date: '2026-10-09',
-    time: '20:00 ST',
-    title: 'Friendslop Friday',
-    type: 'Game Night'
-  },
-  {
-    date: '2026-10-10',
-    time: '20:00 ST',
-    title: 'Alexander Raids',
-    type: 'Raid'
-  },
-  {
-    date: '2026-10-11',
-    time: '20:00 ST',
-    title: 'Sunday Movie Night — TBA',
-    type: 'Movie',
-    detail: 'Film to be announced closer to the date — check Discord for the pick.'
-  },
-  {
-    date: '2026-10-07',
-    time: '20:00 ST',
-    title: 'Sprout Night',
-    type: 'Raid',
-    detail: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.'
-  },
-  {
     date: '2026-10-16',
     time: '20:00 ST',
     title: 'Friendslop Friday',
@@ -234,13 +221,6 @@ const EVENTS = [
     time: '20:00 ST',
     title: 'Hide and Seek in Gridania',
     type: 'Social'
-  },
-  {
-    date: '2026-10-18',
-    time: '20:00 ST',
-    title: 'Sunday Movie Night — TBA',
-    type: 'Movie',
-    detail: 'Film to be announced closer to the date — check Discord for the pick.'
   },
   {
     date: '2026-10-14',
@@ -257,15 +237,8 @@ const EVENTS = [
   {
     date: '2026-10-24',
     time: '20:00 ST',
-    title: 'Stormblood Mount Farm',
+    title: 'Alexander Raids',
     type: 'Raid'
-  },
-  {
-    date: '2026-10-25',
-    time: '20:00 ST',
-    title: 'Sunday Movie Night — TBA',
-    type: 'Movie',
-    detail: 'Film to be announced closer to the date — check Discord for the pick.'
   },
   {
     date: '2026-10-28',
@@ -283,6 +256,12 @@ const EVENTS = [
     date: '2026-10-31',
     title: '???',
     type: 'Event'
+  },
+  {
+    date: '2026-11-07',
+    time: '20:00 ST',
+    title: 'Stormblood Mount Farm',
+    type: 'Raid'
   },
   {
     date: '2026-11-04',
