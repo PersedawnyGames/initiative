@@ -178,47 +178,78 @@
     }
 
     // Leadership only, in RANKS order, alphabetical within each rank.
+    // A character marked `altOf: '<main character id>'` in data.js is folded
+    // into that character's card instead of getting a card of its own.
     function roster() {
-      return members
+      var list = members
         .map(function (m) {
           var rank  = rankOf(m);
           var extra = community[m.id] || {};
           return rank && {
             name: m.name, id: m.id, portrait: m.portrait,
-            rankIndex: rank.index, rankLabel: rank.label,
-            discord: extra.discord || '', role: extra.role || ''
+            rankIndex: rank.index, rankLabel: extra.rankLabel || rank.label,
+            discord: extra.discord || '', role: extra.role || '',
+            altOf: extra.altOf || '', alts: [], hidden: !!extra.hidden
           };
         })
-        .filter(Boolean)
-        .sort(function (a, b) {
-          return a.rankIndex - b.rankIndex || a.name.localeCompare(b.name);
-        });
+        .filter(function (m) { return m && !m.hidden; });
+
+      var byId = {};
+      list.forEach(function (m) { byId[m.id] = m; });
+
+      list = list.filter(function (m) {
+        var main = m.altOf && byId[m.altOf];
+        if (!main) return true;          // no main on the roster → keep own card
+        main.alts.push(m);
+        return false;
+      });
+
+      // Cards are ordered by the title shown on them (ROSTER_ORDER in data.js);
+      // anything not listed there falls back to its in-game rank order.
+      function place(m) {
+        var i = (typeof ROSTER_ORDER !== 'undefined') ? ROSTER_ORDER.indexOf(m.rankLabel) : -1;
+        return i === -1 ? 1000 + m.rankIndex : i;
+      }
+
+      return list.sort(function (a, b) {
+        return place(a) - place(b) || a.name.localeCompare(b.name);
+      });
     }
 
     function matches(m, q) {
-      return !q || [m.name, m.rankLabel, m.role, m.discord].join(' ').toLowerCase().indexOf(q) !== -1;
+      var names = [m.name].concat(m.alts.map(function (a) { return a.name; }));
+      return !q || [names.join(' '), m.rankLabel, m.role, m.discord].join(' ').toLowerCase().indexOf(q) !== -1;
     }
 
     // Initials sit underneath the portrait and show through if the image is
     // missing or fails to load.
-    function memberMarkup(m) {
-      var linked = /^\d+$/.test(m.id || '');
+    function portraitMarkup(c) {
+      var linked = /^\d+$/.test(c.id || '');
       var tag    = linked ? 'a' : 'div';
       var attrs  = linked
-        ? ' href="' + LODESTONE + m.id + '/" target="_blank" rel="noopener"' +
-          ' aria-label="' + esc(m.name) + ' on the Lodestone"'
+        ? ' href="' + LODESTONE + c.id + '/" target="_blank" rel="noopener"' +
+          ' aria-label="' + esc(c.name) + ' on the Lodestone"'
         : '';
 
-      return '<article class="member">' +
-               '<' + tag + ' class="portrait"' + attrs + '>' +
-                 '<div class="portrait__frame">' +
-                   '<span class="portrait__fallback" aria-hidden="true">' + esc(initials(m.name)) + '</span>' +
-                   (m.portrait
-                     ? '<img src="' + esc(m.portrait) + '" alt="" width="880" height="1200" loading="lazy" decoding="async">'
-                     : '') +
-                 '</div>' +
-                 '<span class="portrait__name">' + esc(m.name) + '</span>' +
-               '</' + tag + '>' +
+      return '<' + tag + ' class="portrait"' + attrs + '>' +
+               '<div class="portrait__frame">' +
+                 '<span class="portrait__fallback" aria-hidden="true">' + esc(initials(c.name)) + '</span>' +
+                 (c.portrait
+                   ? '<img src="' + esc(c.portrait) + '" alt="" width="880" height="1200" loading="lazy" decoding="async">'
+                   : '') +
+               '</div>' +
+               '<span class="portrait__name">' + esc(c.name) + '</span>' +
+             '</' + tag + '>';
+    }
+
+    function memberMarkup(m) {
+      var chars = [m].concat(m.alts);
+      var multi = chars.length > 1;
+
+      return '<article class="member' + (multi ? ' member--multi' : '') + '">' +
+               (multi
+                 ? '<div class="member__portraits">' + chars.map(portraitMarkup).join('') + '</div>'
+                 : portraitMarkup(m)) +
                '<div class="member__info">' +
                  '<span class="member__rank">' + esc(m.rankLabel) + '</span>' +
                  (m.role ? '<span class="member__role">' + esc(m.role) + '</span>' : '') +

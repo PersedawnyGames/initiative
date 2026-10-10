@@ -36,6 +36,10 @@ const RANKS = [
   { name: 'Council',     label: 'Council' }
 ];
 
+/* Order of the cards on the roster page, by the title shown on each card
+   (a member's `rankLabel` below, or else their rank's label above). */
+const ROSTER_ORDER = ['Emperor', 'Overseer', 'High Council', 'Council'];
+
 /* --- Roster --------------------------------------------------------------
    One row per character. Anyone on the Lodestone member list holding one of
    the RANKS above appears on the roster page automatically.
@@ -43,6 +47,11 @@ const RANKS = [
    Edit these yourself:
      discord   their Discord name
      role      their role in the community
+     rankLabel (optional) show this title on their card instead of the rank's
+               label (e.g. 'High Council') — sorting still follows the rank
+     hidden    (optional) true = keep this character off the roster page
+     altOf     (optional) the Lodestone id of their main character — an alt
+               with this set shares the main's card instead of getting its own
 
    Refreshed from the Lodestone (matched by id) — the values here are only a
    saved copy, shown if the Lodestone can't be reached:
@@ -50,12 +59,15 @@ const RANKS = [
 -------------------------------------------------------------------------- */
 const MEMBERS = [
   { name: 'Cipher Imperius',   discord: 'Cipher',           role: 'Community Leadership',  rank: 'The Emperor', id: '61287057', portrait: 'https://img2.finalfantasyxiv.com/f/8385d4f331e00b9a92abd1dc2322de6d_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789544578' },
-  { name: 'Dino Dan',          discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Regent',      id: '61277910', portrait: 'https://img2.finalfantasyxiv.com/f/e931fbe7c5b039f2a3017dcab855f1eb_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545688' },
-  { name: 'Kidagakash Nedakh', discord: 'Kida (Alba)',      role: 'Member Support',        rank: 'Regent',      id: '61302595', portrait: 'https://img2.finalfantasyxiv.com/f/4d1a1d6d3046ff53ad533b185b39a5a2_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545546' },
-  { name: 'Nemo Rosa',         discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Regent',      id: '3078113',  portrait: 'https://img2.finalfantasyxiv.com/f/8c09e967f667289e22af8a7804d36e9e_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545883' },
-  { name: 'Opal Noxfleuret',   discord: 'Opal Noxfleuret',  role: 'Estate Management',     rank: 'Regent',      id: '38510729', portrait: 'https://img2.finalfantasyxiv.com/f/0adce7b73914ddc306318aac1eeea802_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546719' },
-  { name: 'Dawn Undomiel',     discord: 'Dawn Undomiel',    role: 'Events Manager',        rank: 'Council',     id: '61417925', portrait: 'https://img2.finalfantasyxiv.com/f/62a93a3aafe9b6af1b2572395ae096ec_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546626' },
-  { name: 'Pale King',         discord: 'Pale King',        role: 'High-End Content Lead', rank: 'Council',     id: '61342637', portrait: 'https://img2.finalfantasyxiv.com/f/a0de494ee474fe0ebb025b3b81dfc74d_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789547107' },
+  { name: 'Dino Dan',          discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Regent',      rankLabel: 'Overseer', altOf: '3078113', id: '61277910', portrait: 'https://img2.finalfantasyxiv.com/f/e931fbe7c5b039f2a3017dcab855f1eb_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545688' },
+  { name: 'Lumina Cipher',      discord: '',                 role: '',                      rank: 'Regent',      hidden: true, id: '61342026', portrait: '' },
+  { name: 'Ninja Novak',        discord: '',                 role: '',                      rank: 'Regent',      hidden: true, id: '61355324', portrait: '' },
+  { name: 'Kidagakash Nedakh', discord: 'Kida (Alba)',      role: 'Member Support',        rank: 'Regent',      rankLabel: 'High Council', id: '61302595', portrait: 'https://img2.finalfantasyxiv.com/f/4d1a1d6d3046ff53ad533b185b39a5a2_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545546' },
+  { name: 'Nemo Rosa',         discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Regent',      rankLabel: 'Overseer', id: '3078113', portrait: 'https://img2.finalfantasyxiv.com/f/8c09e967f667289e22af8a7804d36e9e_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545883' },
+  { name: 'Opal Noxfleuret',   discord: 'Opal Noxfleuret',  role: 'Estate Management',     rank: 'Regent',      rankLabel: 'High Council', id: '38510729', portrait: 'https://img2.finalfantasyxiv.com/f/0adce7b73914ddc306318aac1eeea802_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546719' },
+  { name: 'Dawn Undomiel',     discord: 'Dawn Undomiel',    role: 'Events Manager',        rank: 'Council',     rankLabel: 'Overseer',     id: '61417925', portrait: 'https://img2.finalfantasyxiv.com/f/62a93a3aafe9b6af1b2572395ae096ec_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546626' },
+  { name: 'Mizuki Sasaki',      discord: 'Summer / Mizuki',  role: 'FC Operations Manager', rank: 'Council',     altOf: '56325437', id: '60104764', portrait: '' },
+  { name: 'Pale King',        discord: 'Pale King',        role: 'High-End Content Lead', rank: 'Council',     id: '61342637', portrait: 'https://img2.finalfantasyxiv.com/f/a0de494ee474fe0ebb025b3b81dfc74d_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789547107' },
   { name: 'Summer Cassidy',    discord: 'Summer / Mizuki',  role: 'FC Operations Manager', rank: 'Council',     id: '56325437', portrait: 'https://img2.finalfantasyxiv.com/f/ad695212e542b122edc3d95d88633d83_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789547815' }
 ];
 
@@ -131,6 +143,13 @@ const EVENTS = [
     title: 'FFXIV x Fall Guys Collaboration',
     type: 'FF14',
     detail: 'Official crossover event returns. Requires level 15 and one of the early MSQ quests "The Gridanian Envoy", "The Ul’dahn Envoy" or "The Lominsan Envoy" — start "Just Crowning Around" from Lewena at the Gold Saucer. Join Blunderville shows to earn Manderville Gold Saucer Fame (MGF) and exchange it for Fall Guys-themed outfits, Winner’s Crowns, furnishings and an orchestrion roll (MGF can only be earned during the event). Runs 7 Oct, 8:00 GMT – 27 Oct, 14:59 GMT.'
+  },
+  {
+    date: '2026-10-15',
+    endDate: '2026-11-02',
+    title: 'All Saints’ Wake 2026',
+    type: 'FF14',
+    detail: 'Official seasonal Halloween event — "A Grisly Affair of Mortals and Bears". Requires level 15; speak with the Pumpkin-headed Apparition in Old Gridania (X:10.2, Y:9.4) to begin. Rewards include spooky armor and furnishings, and a peddler sells items from previous years’ events. Seasonal quests can’t be completed once the event ends. Runs 15 Oct, 8:00 GMT – 2 Nov, 14:59 GMT (dates may change).'
   },
   {
     date: '2026-09-18',
