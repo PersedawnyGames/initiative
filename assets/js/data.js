@@ -242,6 +242,12 @@ const EVENTS = [
     type: 'Social'
   },
   {
+    date: '2026-10-18',
+    time: '19:00 ST',
+    title: 'Finia Dei & Lime Bell’s Wedding',
+    type: 'Event'
+  },
+  {
     date: '2026-10-14',
     time: '20:00 ST',
     title: 'Treasure Maps',
