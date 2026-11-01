@@ -686,11 +686,31 @@
   }
 
   function calNormalize(list) {
+    var midnight = new Date();
+    midnight.setHours(0, 0, 0, 0);
+
     return list.map(function (ev) {
       var start = calParseDate(ev.date);
       var end   = ev.endDate ? calParseDate(ev.endDate) : start;
       if (end < start) end = start;
-      return { title: ev.title, time: ev.time, type: ev.type, detail: ev.detail, start: start, end: end };
+
+      var title = ev.title, detail = ev.detail;
+
+      // Advent-calendar events stay a mystery ("???") until their day, then
+      // take their real name and details from the ADVENT list in data.js.
+      if (ev.adventDay && typeof ADVENT !== 'undefined') {
+        var door = null;
+        ADVENT.days.forEach(function (d) { if (d.day === ev.adventDay) door = d; });
+        if (door && midnight >= start) {
+          title  = door.title;
+          detail = door.text;
+        } else if (door) {
+          title  = '???';
+          detail = 'A mystery event \u2014 revealed on the day!';
+        }
+      }
+
+      return { title: title, time: ev.time, type: ev.type, detail: detail, start: start, end: end };
     });
   }
 
@@ -1015,8 +1035,299 @@
   }
 
   /* ---- Boot ------------------------------------------------------------ */
+  /* ---- Advent calendar page ---------------------------------------------
+     Doors unlock on their own date (the visitor's local date); adding
+     ?preview to the page address opens them all. Opened doors are
+     remembered in the visitor's browser. ---------------------------------- */
+  function renderAdvent() {
+    var host = $('[data-render="advent"]');
+    if (!host || typeof ADVENT === 'undefined') return;
+
+    var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                  'August', 'September', 'October', 'November', 'December'];
+    var KINDS = {
+      daily:  { label: 'Daily surprise',   icon: 'gift' },
+      event:  { label: 'FC event',         icon: 'star' },
+      finale: { label: 'Christmas finale', icon: 'crown' }
+    };
+    var GLYPHS = {
+      gift:  '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+      star:  '<path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/>',
+      crown: '<path d="M3 18L2 7l5.5 5L12 4l4.5 8L22 7l-1 11z"/><path d="M3.5 21h17"/>',
+      lock:  '<rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>'
+    };
+
+    function glyph(name, cls) {
+      return '<svg class="' + cls + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+             'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+             GLYPHS[name] + '</svg>';
+    }
+
+    var year  = ADVENT.year;
+    var month = ADVENT.month;                       // 1–12
+    var name  = MONTHS[month - 1];
+    var days  = ADVENT.days.slice().sort(function (a, b) { return a.day - b.day; });
+    var byDay = {};
+    days.forEach(function (d) { byDay[d.day] = d; });
+    var last  = days.length ? days[days.length - 1].day : 0;
+
+    var preview = /[?&]preview(=|&|$)/.test(location.search);
+    var lockByDate = ADVENT.lockByDate !== false;
+    var now     = new Date();
+    var nowKey  = now.getFullYear() * 12 + now.getMonth();
+    var thisKey = year * 12 + (month - 1);
+    // The highest day number that is open right now.
+    var openTo  = preview || !lockByDate || nowKey > thisKey ? 99 : nowKey === thisKey ? now.getDate() : 0;
+    var today   = nowKey === thisKey ? now.getDate() : 0;
+
+    // Opened doors are remembered per browser; storage may be unavailable.
+    var STORE = 'initiative-advent-' + year;
+    var opened = {};
+    try { opened = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { opened = {}; }
+    function remember(day) {
+      opened[day] = 1;
+      try { localStorage.setItem(STORE, JSON.stringify(opened)); } catch (e) { /* ignore */ }
+    }
+
+    var offset = (new Date(year, month - 1, 1).getDay() + 6) % 7;   // Monday-first
+    var selected = 0;
+
+    function doorMarkup(d) {
+      var kind   = KINDS[d.kind] || KINDS.daily;
+      var locked = d.day > openTo;
+      var cls = 'advent__door advent__door--' + (KINDS[d.kind] ? d.kind : 'daily') +
+                (locked ? ' is-locked' : '') +
+                (opened[d.day] && !locked ? ' is-opened' : '') +
+                (d.day === today ? ' is-today' : '');
+      return '<button type="button" class="' + cls + '" data-day="' + d.day + '" ' +
+               'aria-label="' + esc(name + ' ' + d.day + ' — ' + kind.label + (locked ? ' (locked)' : '')) + '">' +
+               '<span class="advent__num">' + d.day + '</span>' +
+               glyph(kind.icon, 'advent__ico') +
+             '</button>';
+    }
+
+    function statusText() {
+      if (preview) return 'Preview mode — every door is open.';
+      if (!lockByDate) return 'Every door is open — tap any date to see what\u2019s behind it.';
+      if (openTo === 0) {
+        var start = new Date(year, month - 1, 1);
+        var left  = Math.max(1, Math.ceil((start - now) / 86400000));
+        return 'The calendar opens on 1 ' + name + ' — ' + left + (left === 1 ? ' day' : ' days') + ' to go.';
+      }
+      if (openTo >= last) return 'Every door is open — happy holidays from Initiative!';
+      return 'Today is ' + name + ' ' + openTo + ' — doors 1 to ' + openTo + ' are open.';
+    }
+
+    host.innerHTML =
+      '<div class="advent__head">' +
+        '<div>' +
+          '<h2 class="advent__month">' + esc(name + ' ' + year) + '</h2>' +
+          '<p class="advent__sub">Tap a door to reveal its surprise</p>' +
+        '</div>' +
+        '<div class="advent__legend">' +
+          '<span>' + glyph('gift', 'advent__ico') + 'Daily</span>' +
+          '<span>' + glyph('star', 'advent__ico') + 'Event</span>' +
+          '<span>' + glyph('crown', 'advent__ico') + 'Finale</span>' +
+        '</div>' +
+      '</div>' +
+      '<p class="advent__status">' + esc(statusText()) + '</p>' +
+      '<div class="advent__body">' +
+        '<div class="advent__weekdays" aria-hidden="true">' +
+          ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(function (w) { return '<span>' + w + '</span>'; }).join('') +
+        '</div>' +
+        '<div class="advent__grid">' +
+          new Array(offset + 1).join('<span class="advent__blank"></span>') +
+          days.map(doorMarkup).join('') +
+        '</div>' +
+        '<div class="advent__detail" data-advent="detail" aria-live="polite">' +
+          '<p class="advent__hint">Tap a door to see what’s inside, kupo!</p>' +
+        '</div>' +
+      '</div>';
+
+    var detail = $('[data-advent="detail"]', host);
+
+    function show(day) {
+      var d = byDay[day];
+      if (!d) return;
+      var kind = KINDS[d.kind] || KINDS.daily;
+
+      $$('.advent__door', host).forEach(function (b) {
+        b.classList.toggle('is-selected', +b.getAttribute('data-day') === day);
+      });
+      selected = day;
+
+      if (day > openTo) {
+        detail.innerHTML =
+          '<div class="advent__detail-card is-locked">' +
+            glyph('lock', 'advent__detail-ico') +
+            '<div>' +
+              '<p class="advent__detail-meta">Door ' + day + '</p>' +
+              '<h3>Not yet, kupo!</h3>' +
+              '<p>This door unlocks on ' + esc(name) + ' ' + day + '. No peeking!</p>' +
+            '</div>' +
+          '</div>';
+        return;
+      }
+
+      remember(day);
+      var btn = $('.advent__door[data-day="' + day + '"]', host);
+      if (btn) btn.classList.add('is-opened');
+
+      detail.innerHTML =
+        '<div class="advent__detail-card advent__detail-card--' + (KINDS[d.kind] ? d.kind : 'daily') + '">' +
+          glyph(kind.icon, 'advent__detail-ico') +
+          '<div>' +
+            '<p class="advent__detail-meta">' + esc(name + ' ' + day) + ' · ' + esc(kind.label) + '</p>' +
+            '<h3>' + (d.emoji ? '<span class="advent__emoji" aria-hidden="true">' + esc(d.emoji) + '</span> ' : '') + esc(d.title) + '</h3>' +
+            '<p>' + esc(d.text || '') + '</p>' +
+            (d.extras || []).map(function (x) {
+              return '<div class="advent__extra">' +
+                       '<p class="advent__detail-meta">Also today</p>' +
+                       '<h4>' + (x.emoji ? '<span class="advent__emoji" aria-hidden="true">' + esc(x.emoji) + '</span> ' : '') + esc(x.title) + '</h4>' +
+                       '<p>' + esc(x.text || '') + '</p>' +
+                     '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>';
+    }
+
+    host.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('.advent__door');
+      if (!btn) return;
+      var day = +btn.getAttribute('data-day');
+      show(day);
+      if (day > openTo) {
+        btn.classList.remove('is-shaking');
+        void btn.offsetWidth;                // restart the animation
+        btn.classList.add('is-shaking');
+      }
+    });
+
+    // Start on today's door when the calendar is running.
+    if (today && byDay[today] && today <= openTo) show(today);
+  }
+
+  /* ---- Advent page: falling snow and sparkles --------------------------- */
+  function initAdventSky() {
+    var sky = $('.advent-sky');
+    if (!sky) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < 56; i++) {
+      var sparkle = i % 7 === 0;                       // every so often, a gold star-shaped sparkle
+      var size = sparkle ? 9 + Math.random() * 8 : 2 + Math.random() * 4;
+      var f = document.createElement('span');
+      f.className = 'advent-flake' + (sparkle ? ' advent-flake--star' : '');
+      f.style.left = (Math.random() * 100).toFixed(1) + '%';
+      f.style.width = f.style.height = size.toFixed(1) + 'px';
+      f.style.opacity = (0.4 + Math.random() * 0.55).toFixed(2);
+      f.style.animationDuration = (9 + Math.random() * 13).toFixed(1) + 's,' + (3 + Math.random() * 3).toFixed(1) + 's';
+      f.style.animationDelay = '-' + (Math.random() * 22).toFixed(1) + 's,-' + (Math.random() * 5).toFixed(1) + 's';
+      frag.appendChild(f);
+    }
+    sky.appendChild(frag);
+  }
+
+  /* ---- Advent page: countdown to the finale ------------------------------ */
+  function initAdventHero() {
+    var el = $('[data-advent="countdown-text"]');
+    if (!el || typeof ADVENT === 'undefined' || !ADVENT.days.length) return;
+
+    var last = 0;
+    ADVENT.days.forEach(function (d) { if (d.day > last) last = d.day; });
+
+    var now      = new Date();
+    var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var opens    = new Date(ADVENT.year, ADVENT.month - 1, 1);
+    var finale   = new Date(ADVENT.year, ADVENT.month - 1, last);
+    var days     = Math.round((finale - midnight) / 86400000);
+    var toOpen   = Math.round((opens - midnight) / 86400000);
+    var plural   = function (n) { return n + (n === 1 ? ' day' : ' days'); };
+
+    if (days < 0)        el.textContent = 'Happy holidays from Initiative — see you next Starlight!';
+    else if (days === 0) el.textContent = 'Tonight: the Grand Starlight Finale!';
+    else if (toOpen > 0) el.textContent = 'The doors open in ' + plural(toOpen) + ' · Grand Starlight Finale in ' + plural(days);
+    else                 el.textContent = plural(days) + ' until the Grand Starlight Finale';
+  }
+
+  /* ---- Events page: seasonal "Morbol Month" theme ------------------------
+     Active between EVENTS_THEME.from and .to (see data.js). For testing,
+     events.html?theme=morbol forces it on and ?theme=off forces it off. --- */
+  function initEventsTheme() {
+    if (typeof EVENTS_THEME === 'undefined' || document.body.classList.contains('page-advent')) return;
+
+    var t = new Date();
+    var iso = t.getFullYear() + '-' + ('0' + (t.getMonth() + 1)).slice(-2) + '-' + ('0' + t.getDate()).slice(-2);
+    var on  = iso >= EVENTS_THEME.from && iso <= EVENTS_THEME.to;
+    if (/[?&]theme=off(&|$)/.test(location.search)) on = false;
+    if (new RegExp('[?&]theme=' + EVENTS_THEME.name + '(&|$)').test(location.search)) on = true;
+    if (!on) return;
+
+    document.body.classList.add('theme-' + EVENTS_THEME.name);
+
+    var bog = document.createElement('div');
+    bog.className = 'mb-bog';
+    bog.setAttribute('aria-hidden', 'true');
+    var spores = document.createElement('div');
+    spores.className = 'mb-spores';
+    spores.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(spores, document.body.firstChild);
+    document.body.insertBefore(bog, document.body.firstChild);
+
+    if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < 28; i++) {
+        var size = 5 + Math.random() * 12;
+        var s = document.createElement('span');
+        s.className = 'mb-spore';
+        s.style.left = (Math.random() * 100).toFixed(1) + '%';
+        s.style.width = s.style.height = size.toFixed(1) + 'px';
+        s.style.animationDuration = (11 + Math.random() * 12).toFixed(1) + 's,' + (3 + Math.random() * 3).toFixed(1) + 's';
+        s.style.animationDelay = '-' + (Math.random() * 22).toFixed(1) + 's,-' + (Math.random() * 5).toFixed(1) + 's';
+        frag.appendChild(s);
+      }
+      spores.appendChild(frag);
+    }
+
+    var banner = $('.page-banner') || $('.hero');
+    if (banner) {
+      var vines = document.createElement('div');
+      vines.className = 'mb-vines';
+      vines.setAttribute('aria-hidden', 'true');
+      banner.insertBefore(vines, banner.firstChild);
+    }
+
+    // Per-page retitling: [selector that identifies the page, heading text, calendar heading]
+    var pageBanner = $('.page-banner');
+    if (pageBanner) {
+      var eyebrow = $('.eyebrow', pageBanner), h1 = $('h1', pageBanner), rule = $('.rule', pageBanner);
+      var isCal = !!$('[data-render="calendar"]');
+      var isRoster = !!$('[data-render="roster"]');
+      var isMembers = !!$('[data-render="all-members"]');
+      if (eyebrow) eyebrow.textContent = EVENTS_THEME.label || 'Morbol Month';
+      if (h1) h1.textContent = isCal ? 'Morbol Events' : isRoster ? 'The Morbol Roster' : isMembers ? 'Morbol Members' : h1.textContent;
+      if (isCal && rule && EVENTS_THEME.kicker) {
+        var k = document.createElement('p');
+        k.className = 'mb-kicker';
+        k.textContent = EVENTS_THEME.kicker;
+        rule.parentNode.insertBefore(k, rule.nextSibling);
+      }
+    }
+
+    var hero = $('.hero');
+    if (hero) {
+      var tag = $('.hero__tag', hero);
+      if (tag) tag.textContent = (EVENTS_THEME.label || 'Morbol Month') + ' \u00b7 Light \u00b7 Alpha';
+    }
+
+    var calHead = $('[data-render="calendar"]') && $('.section-head h2');
+    if (calHead && EVENTS_THEME.calendarTitle) calHead.textContent = EVENTS_THEME.calendarTitle;
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initNav();
+    initEventsTheme();   // before anything renders, so it can re-label the banner
     initFcBindings();
     initLiveFc();
     renderActivities();
@@ -1025,6 +1336,9 @@
     renderMaintenance();
     renderCalendar();
     renderSproutNight();
+    renderAdvent();
+    initAdventSky();
+    initAdventHero();
     initYear();
     initReveal();   // last: everything rendered above is now in the DOM
   });

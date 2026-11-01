@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starlight Advent Calendar — Initiative</title>
+  <meta name="description" content="The Initiative FC advent calendar — a new surprise behind every door in December 2026.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page-advent">
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="adv-crystal" viewBox="0 0 40 80">
+        <polygon points="20,2 4,24 20,34" fill="currentColor" opacity=".72"/>
+        <polygon points="20,2 36,24 20,34" fill="currentColor"/>
+        <polygon points="4,24 20,34 20,78 4,56" fill="currentColor" opacity=".55"/>
+        <polygon points="36,24 20,34 20,78 36,56" fill="currentColor" opacity=".85"/>
+        <path d="M20 2 L20 78 M4 24 L36 24" stroke="#fff" stroke-opacity=".45" stroke-width="1" fill="none"/>
+        <polygon points="20,2 12,18 20,24 28,18" fill="#fff" opacity=".35"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="advent-aurora" aria-hidden="true"></div>
+  <div class="advent-sky" aria-hidden="true"></div>
+
+  <main>
+    <header class="adv-hero">
+      <div class="adv-bar">
+        <a class="adv-bar__brand" href="index.html">
+          <svg viewBox="0 0 48 48" fill="none" stroke="#c8a95e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M24 3l18 10v22L24 45 6 35V13z"/>
+            <path d="M24 13v22M17 18l7-5 7 5"/>
+          </svg>
+          <span>Initiative</span>
+        </a>
+        <nav class="adv-bar__links" aria-label="Back to the site">
+          <a href="index.html">Home</a>
+          <a href="events.html">Events</a>
+          <a href="roster.html">Roster</a>
+          <a href="members.html">Members</a>
+        </nav>
+      </div>
+
+      <div class="advent-lights" aria-hidden="true"></div>
+
+      <span class="adv-eyebrow">Starlight Celebration &middot; December 2026</span>
+      <h1 class="adv-title">Starlight Advent</h1>
+      <p class="adv-subtitle">The Initiative FC Advent Calendar</p>
+      <svg class="advent-flourish" viewBox="0 0 260 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 9h96M160 9h96"/>
+        <path d="M130 1l5 8-5 8-5-8z" fill="currentColor"/>
+        <circle cx="112" cy="9" r="2" fill="currentColor"/><circle cx="148" cy="9" r="2" fill="currentColor"/>
+      </svg>
+
+      <div class="adv-stage">
+        <svg class="adv-crystal adv-crystal--a" style="color:#ff6b4a" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <svg class="adv-crystal adv-crystal--b" style="color:#9fdcff" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <svg class="adv-crystal adv-crystal--c" style="color:#7ee08a" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <svg class="adv-crystal adv-crystal--d" style="color:#c58bff" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <svg class="adv-crystal adv-crystal--e" style="color:#e0c060" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <svg class="adv-crystal adv-crystal--f" style="color:#4aa8ff" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <svg class="adv-tree" viewBox="0 0 320 400" role="img" aria-label="A glowing Starlight tree decorated with ornaments and gifts">
+  <defs>
+    <linearGradient id="advLeaf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3aa56b"/><stop offset="1" stop-color="#0f4a2e"/>
+    </linearGradient>
+    <linearGradient id="advStar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbe9"/><stop offset="1" stop-color="#e0b64e"/>
+    </linearGradient>
+  </defs>
+  <rect x="145" y="326" width="30" height="40" rx="3" fill="#5a3a22"/>
+  <path d="M160 190 L58 332 L262 332 Z" fill="url(#advLeaf)" stroke="#0c3a25" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M160 140 L76 258 L244 258 Z" fill="url(#advLeaf)" stroke="#0c3a25" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M160 92 L92 190 L228 190 Z" fill="url(#advLeaf)" stroke="#0c3a25" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M160 52 L108 128 L212 128 Z" fill="url(#advLeaf)" stroke="#0c3a25" stroke-width="2" stroke-linejoin="round"/>
+  <g fill="none" stroke="#f4fbff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+    <path d="M108 128 q13 9 26 0 t26 0 t26 0 t26 0"/>
+    <path d="M92 190 q17 9 34 0 t34 0 t34 0 t34 0"/>
+    <path d="M76 258 q21 10 42 0 t42 0 t42 0 t42 0"/>
+    <path d="M58 332 q25.5 10 51 0 t51 0 t51 0 t51 0"/>
+  </g>
+  <g fill="none" stroke="#ecd398" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="0.1 7">
+    <path d="M119 112 Q160 130 201 112"/>
+    <path d="M108 168 Q160 198 212 168"/>
+    <path d="M95 232 Q160 266 225 232"/>
+    <path d="M81 300 Q160 336 239 300"/>
+  </g>
+  <circle class="orn" cx="140" cy="104" r="5" fill="#e2475a"/><circle cx="138.5" cy="102.5" r="1.4" fill="#fff" opacity=".7"/><circle class="orn" cx="180" cy="108" r="5" fill="#ecd398"/><circle cx="178.5" cy="106.5" r="1.4" fill="#fff" opacity=".7"/><circle class="orn" cx="160" cy="150" r="6" fill="#9fdcff"/><circle cx="158.2" cy="148.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="122" cy="164" r="6" fill="#e2475a"/><circle cx="120.2" cy="162.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="198" cy="168" r="6" fill="#ecd398"/><circle cx="196.2" cy="166.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="160" cy="182" r="5" fill="#e2475a"/><circle cx="158.5" cy="180.5" r="1.4" fill="#fff" opacity=".7"/><circle class="orn" cx="112" cy="236" r="7" fill="#e2475a"/><circle cx="109.9" cy="233.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="160" cy="216" r="6" fill="#9fdcff"/><circle cx="158.2" cy="214.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="208" cy="238" r="7" fill="#ecd398"/><circle cx="205.9" cy="235.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="138" cy="252" r="6" fill="#ecd398"/><circle cx="136.2" cy="250.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="184" cy="254" r="6" fill="#e2475a"/><circle cx="182.2" cy="252.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="92" cy="314" r="7" fill="#ecd398"/><circle cx="89.9" cy="311.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="130" cy="290" r="7" fill="#e2475a"/><circle cx="127.9" cy="287.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="170" cy="300" r="7" fill="#9fdcff"/><circle cx="167.9" cy="297.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="212" cy="286" r="7" fill="#ecd398"/><circle cx="209.9" cy="283.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="236" cy="318" r="7" fill="#e2475a"/><circle cx="233.9" cy="315.9" r="2.0" fill="#fff" opacity=".7"/><circle class="orn" cx="150" cy="324" r="6" fill="#ecd398"/><circle cx="148.2" cy="322.2" r="1.7" fill="#fff" opacity=".7"/><circle class="orn" cx="196" cy="322" r="6" fill="#9fdcff"/><circle cx="194.2" cy="320.2" r="1.7" fill="#fff" opacity=".7"/>
+  <g class="topper">
+    <path d="M160 6 L168 27 L192 35 L168 43 L160 66 L152 43 L128 35 L152 27 Z" fill="url(#advStar)"/>
+    <circle cx="160" cy="35" r="4" fill="#fff"/>
+  </g>
+  <g>
+    <rect x="60" y="340" width="40" height="28" rx="2" fill="#b3202f"/><rect x="77" y="340" width="6" height="28" fill="#ecd398"/><rect x="60" y="351" width="40" height="5" fill="#ecd398"/>
+    <rect x="106" y="348" width="30" height="20" rx="2" fill="#1f6b46"/><rect x="118" y="348" width="6" height="20" fill="#f0dfae"/>
+    <rect x="186" y="344" width="34" height="24" rx="2" fill="#e3c06b"/><rect x="200" y="344" width="6" height="24" fill="#b3202f"/><rect x="186" y="353" width="34" height="5" fill="#b3202f"/>
+    <rect x="226" y="338" width="38" height="30" rx="2" fill="#6fa8dc"/><rect x="242" y="338" width="6" height="30" fill="#fff"/><rect x="226" y="350" width="38" height="5" fill="#fff"/>
+  </g>
+</svg>
+      </div>
+
+      <p class="adv-count" data-advent="countdown">
+        <svg viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg>
+        <span data-advent="countdown-text">Counting down to the Grand Starlight Finale&hellip;</span>
+        <svg viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg>
+      </p>
+
+      <p class="adv-intro">
+        Eorzea&rsquo;s winter festival has come to Initiative, kupo! Twenty-four doors, one for every
+        day until Christmas Eve &mdash; daily surprises, FC events and a Grand Starlight Finale. Each door
+        unlocks on its own date, so check back every day. Times and sign-ups for events are in the Discord.
+      </p>
+    </header>
+
+    <div class="adv-gems" aria-hidden="true"><svg style="color:#ff6b4a" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#9fdcff" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#7ee08a" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#e0c060" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#c58bff" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#4aa8ff" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg></div>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="advent" data-render="advent"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="adv-foot">
+    <div class="adv-gems" aria-hidden="true"><svg style="color:#4aa8ff" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#c58bff" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#e0c060" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#7ee08a" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#9fdcff" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg><svg style="color:#ff6b4a" viewBox="0 0 40 80" aria-hidden="true"><use href="#adv-crystal"/></svg></div>
+    <p class="adv-foot__msg">Happy Starlight Celebration from all of us at Initiative, kupo!</p>
+    <nav class="adv-foot__links" aria-label="Site links">
+      <a href="index.html">Home</a>
+      <a href="roster.html">Roster</a>
+      <a href="members.html">Members</a>
+      <a href="events.html">Events</a>
+      <a href="#" data-fc-href="discord">Discord</a>
+      <a href="#" data-fc-href="lodestone">Lodestone</a>
+    </nav>
+    <p class="adv-foot__fine">Initiative &middot; Light &middot; Alpha &middot; Founded <span data-fc="founded">2026</span></p>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/lodestone.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

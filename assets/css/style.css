@@ -1010,6 +1010,844 @@ input:focus {
   .reveal { opacity: 1; transform: none; }
 }
 
+/* --- Advent calendar page ------------------------------------------------- */
+.advent {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.advent__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.advent__month {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: .04em;
+}
+.advent__sub { margin: 2px 0 0; font-size: .82rem; color: var(--muted); }
+
+.advent__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: .75rem;
+  color: var(--muted);
+}
+.advent__legend span { display: inline-flex; align-items: center; gap: 6px; }
+.advent__legend .advent__ico { width: 15px; height: 15px; }
+
+.advent__status {
+  margin: 0;
+  padding: 10px 20px;
+  font-size: .8rem;
+  color: var(--crystal);
+  background: rgba(111, 211, 232, .06);
+  border-bottom: 1px solid var(--line);
+}
+
+.advent__body { padding: 18px 20px 22px; }
+
+.advent__weekdays,
+.advent__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+.advent__weekdays {
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.advent__door {
+  position: relative;
+  aspect-ratio: 1 / 1.1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.advent__door:hover {
+  transform: translateY(-2px);
+  background: var(--panel-hi);
+  border-color: rgba(200, 169, 94, .6);
+}
+.advent__num {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.advent__ico { width: 18px; height: 18px; color: var(--muted); }
+
+.advent__door--event {
+  background: rgba(200, 169, 94, .08);
+  border-color: rgba(200, 169, 94, .35);
+}
+.advent__door--event .advent__ico { color: var(--gold); }
+
+.advent__door--finale {
+  background: linear-gradient(160deg, rgba(200, 169, 94, .24), rgba(200, 169, 94, .07));
+  border-color: var(--gold);
+}
+.advent__door--finale .advent__ico { color: var(--gold-bright); }
+
+.advent__door.is-locked { opacity: .55; }
+.advent__door.is-locked:hover { transform: none; }
+
+/* A small crystal dot marks doors that have been opened. */
+.advent__door.is-opened::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--crystal);
+  box-shadow: 0 0 8px var(--crystal);
+}
+.advent__door.is-today { box-shadow: 0 0 0 2px rgba(111, 211, 232, .55); }
+.advent__door.is-selected {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 1px var(--gold-bright), 0 0 20px rgba(200, 169, 94, .28);
+}
+.advent__door.is-shaking { animation: advent-shake .4s ease; }
+@keyframes advent-shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+.advent__detail {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.advent__hint { margin: 0; text-align: center; color: var(--muted); font-size: .9rem; }
+
+.advent__detail-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 18px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+}
+.advent__detail-card--finale {
+  background: linear-gradient(160deg, rgba(200, 169, 94, .16), var(--bg-alt));
+  border-color: var(--gold);
+}
+.advent__detail-card.is-locked { border-left-color: var(--muted); }
+.advent__detail-ico { flex: none; width: 34px; height: 34px; color: var(--gold); }
+.advent__detail-card.is-locked .advent__detail-ico { color: var(--muted); }
+.advent__detail-meta {
+  margin: 0 0 2px;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.advent__detail-card h3 { margin: 0 0 4px; font-size: 1.2rem; }
+.advent__detail-card p:last-child { margin: 0; color: var(--muted); font-size: .94rem; }
+.advent__extra {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.advent__extra h4 { margin: 0 0 3px; font-size: 1.02rem; }
+
+@media (max-width: 680px) {
+  .advent__head { padding: 14px 14px; }
+  .advent__status { padding: 8px 14px; }
+  .advent__body { padding: 14px 10px 18px; }
+  .advent__weekdays, .advent__grid { gap: 5px; }
+  .advent__weekdays { font-size: .58rem; letter-spacing: .08em; }
+  .advent__door { gap: 3px; padding: 2px; }
+  .advent__num { font-size: .95rem; }
+  .advent__ico { width: 14px; height: 14px; }
+  .advent__detail-card { gap: 12px; padding: 14px; }
+  .advent__detail-ico { width: 28px; height: 28px; }
+}
+
+/* --- Advent page theme: Starlight Celebration -----------------------------
+   Everything below is scoped to body.page-advent, so the rest of the site
+   keeps its normal look. ------------------------------------------------- */
+.page-advent {
+  --adv-red:    #b3202f;
+  --adv-red-hi: #e2475a;
+  --adv-green:  #1f6b46;
+  --adv-ice:    #bfe4ff;
+  background:
+    radial-gradient(1100px 520px at 50% -8%, rgba(179, 32, 47, .26), transparent 62%),
+    radial-gradient(900px 520px at 92% 18%, rgba(47, 184, 163, .12), transparent 60%),
+    radial-gradient(800px 480px at 4% 40%, rgba(31, 107, 70, .16), transparent 60%),
+    linear-gradient(180deg, #060a18 0%, #0b1632 48%, #070b1a 100%);
+  background-attachment: fixed;
+}
+
+/* Twinkling stars */
+.page-advent::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 140px, rgba(255, 255, 255, .8), transparent),
+    radial-gradient(1.5px 1.5px at 150px 60px, #ecd398, transparent),
+    radial-gradient(1px 1px at 210px 190px, rgba(255, 255, 255, .7), transparent),
+    radial-gradient(1.5px 1.5px at 260px 100px, #bfe4ff, transparent),
+    radial-gradient(1px 1px at 40px 220px, rgba(255, 255, 255, .6), transparent);
+  background-size: 300px 260px;
+  animation: advent-twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes advent-twinkle { from { opacity: .45; } to { opacity: 1; } }
+
+/* Falling snow (flakes are added by initAdventSky in main.js) */
+.advent-sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.advent-flake {
+  position: absolute;
+  top: -12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, .75);
+  animation-name: advent-fall, advent-sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-direction: normal, alternate;
+}
+.advent-flake--star {
+  border-radius: 0;
+  background: #fff3c4;
+  box-shadow: none;
+  filter: drop-shadow(0 0 5px rgba(236, 211, 152, .9));
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+@keyframes advent-fall { to { transform: translateY(108vh); } }
+@keyframes advent-sway { from { translate: -14px 0; } to { translate: 14px 0; } }
+
+.page-advent main,
+.page-advent .adv-foot { position: relative; z-index: 1; }
+
+/* Aurora over the whole page */
+.advent-aurora {
+  position: fixed;
+  top: -60px;
+  left: -10%;
+  width: 120%;
+  height: 360px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .8;
+  filter: blur(46px);
+  background: linear-gradient(100deg, transparent 6%, rgba(47, 184, 163, .34) 26%, rgba(111, 211, 232, .24) 46%, rgba(177, 140, 240, .22) 64%, rgba(179, 32, 47, .2) 80%, transparent 96%);
+  transform: skewY(-4deg);
+  animation: advent-aurora 16s ease-in-out infinite alternate;
+}
+@keyframes advent-aurora {
+  from { transform: skewY(-4deg) translateX(-4%); opacity: .55; }
+  to   { transform: skewY(3deg)  translateX(4%);  opacity: .9; }
+}
+
+/* ---- Own top bar (replaces the site header on this page) ---- */
+.adv-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px;
+}
+.adv-bar a {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.adv-bar a:hover { color: #fff; }
+.adv-bar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  letter-spacing: .16em !important;
+}
+.adv-bar__brand svg { width: 26px; height: 26px; }
+.adv-bar__links { display: flex; gap: 22px; }
+
+/* ---- Hero ---- */
+.adv-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 112px 20px 34px;
+  text-align: center;
+  border-bottom: 1px solid rgba(200, 169, 94, .35);
+  background: radial-gradient(760px 320px at 50% 0%, rgba(226, 71, 90, .14), transparent 70%);
+}
+/* A big pale moon behind the tree */
+.adv-hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 270px;
+  width: 560px;
+  height: 560px;
+  margin-left: -280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 244, 214, .17), rgba(255, 244, 214, .05) 45%, transparent 68%);
+  pointer-events: none;
+}
+.adv-hero > * { position: relative; }
+.adv-hero > .adv-bar { position: absolute; }
+
+.adv-eyebrow {
+  display: block;
+  margin-bottom: .5rem;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.adv-eyebrow::before { content: "\2726\00a0\00a0"; color: var(--adv-red-hi); }
+.adv-eyebrow::after  { content: "\00a0\00a0\2726"; color: var(--adv-red-hi); }
+
+.adv-title {
+  margin: 0 0 .1em;
+  font-size: clamp(2.4rem, 9vw, 5rem);
+  letter-spacing: .07em;
+  line-height: 1.05;
+  background: linear-gradient(180deg, #fffbe9 0%, #ecd398 46%, #b8923f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 22px rgba(236, 211, 152, .3));
+}
+.adv-subtitle {
+  margin: 0 0 .9rem;
+  font-family: var(--font-display);
+  font-size: clamp(.95rem, 2.4vw, 1.3rem);
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--adv-ice);
+}
+.advent-flourish {
+  display: block;
+  width: min(280px, 70%);
+  height: 18px;
+  margin: 0 auto 1.1rem;
+  color: var(--gold);
+}
+
+.adv-stage {
+  position: relative;
+  width: min(560px, 100%);
+  margin: 4px auto 0;
+}
+.adv-tree {
+  display: block;
+  width: min(310px, 70vw);
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 34px rgba(236, 211, 152, .22));
+}
+.adv-tree .orn { animation: advent-orn 2.6s ease-in-out infinite alternate; }
+.adv-tree .orn:nth-of-type(3n)   { animation-delay: .7s; }
+.adv-tree .orn:nth-of-type(3n+1) { animation-delay: 1.4s; }
+.adv-tree .orn:nth-of-type(5n)   { animation-duration: 1.9s; }
+.adv-tree .topper { animation: advent-topper 2.2s ease-in-out infinite alternate; transform-origin: 160px 35px; transform-box: view-box; }
+@keyframes advent-orn { from { opacity: .62; } to { opacity: 1; } }
+@keyframes advent-topper {
+  from { filter: drop-shadow(0 0 4px #ecd398); transform: scale(.94); }
+  to   { filter: drop-shadow(0 0 16px #fff3c4); transform: scale(1.08); }
+}
+
+/* Elemental crystals drifting around the tree */
+.adv-crystal {
+  position: absolute;
+  width: 34px;
+  height: 68px;
+  filter: drop-shadow(0 0 12px currentColor);
+  animation: advent-float 5s ease-in-out infinite alternate;
+}
+.adv-crystal--a { left: 2%;  top: 14%; color: #ff6b4a; animation-delay: -1s; }
+.adv-crystal--b { left: 13%; top: 52%; color: #9fdcff; animation-delay: -3s; width: 28px; height: 56px; }
+.adv-crystal--c { left: 6%;  top: 76%; color: #7ee08a; animation-delay: -2s; width: 24px; height: 48px; }
+.adv-crystal--d { right: 2%; top: 20%; color: #c58bff; animation-delay: -4s; }
+.adv-crystal--e { right: 13%; top: 56%; color: #e0c060; animation-delay: -2.5s; width: 28px; height: 56px; }
+.adv-crystal--f { right: 6%; top: 78%; color: #4aa8ff; animation-delay: -.5s; width: 24px; height: 48px; }
+@keyframes advent-float {
+  from { transform: translateY(-8px) rotate(-4deg); }
+  to   { transform: translateY(10px) rotate(4deg); }
+}
+
+.adv-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 18px;
+  padding: 10px 22px;
+  font-family: var(--font-display);
+  font-size: clamp(.82rem, 2.2vw, 1rem);
+  letter-spacing: .12em;
+  color: var(--gold-bright);
+  background: linear-gradient(90deg, rgba(179, 32, 47, .28), rgba(31, 107, 70, .28));
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  box-shadow: 0 0 26px rgba(236, 211, 152, .22), inset 0 0 14px rgba(0, 0, 0, .3);
+}
+.adv-count svg { width: 14px; height: 28px; flex: none; color: var(--crystal); filter: drop-shadow(0 0 6px currentColor); }
+.adv-intro {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #c9d3ec;
+}
+
+/* Strings of lights draped across the top */
+.advent-lights {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  right: 0;
+  height: 44px;
+  pointer-events: none;
+  background-repeat: repeat-x;
+  background-size: 120px 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40'%3E%3Cpath d='M0 4 Q60 34 120 4' fill='none' stroke='%23123a2a' stroke-width='2'/%3E%3Cg%3E%3Ccircle cx='15' cy='12' r='4.2' fill='%23e2475a'/%3E%3Ccircle cx='45' cy='19.5' r='4.2' fill='%23ecd398'/%3E%3Ccircle cx='75' cy='19.5' r='4.2' fill='%236fd3e8'/%3E%3Ccircle cx='105' cy='12' r='4.2' fill='%237cc576'/%3E%3C/g%3E%3C/svg%3E");
+  filter: drop-shadow(0 0 5px rgba(236, 211, 152, .55));
+  animation: advent-bulbs 3.2s ease-in-out infinite alternate;
+}
+@keyframes advent-bulbs { from { opacity: .7; } to { opacity: 1; } }
+
+/* A row of little crystals as a divider */
+.adv-gems {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  height: 40px;
+  margin: 0 auto;
+}
+.adv-gems svg { width: 16px; height: 32px; filter: drop-shadow(0 0 6px currentColor); animation: advent-float 4s ease-in-out infinite alternate; }
+.adv-gems svg:nth-child(2n) { animation-delay: -1.5s; }
+.adv-gems svg:nth-child(3n) { animation-delay: -2.5s; }
+
+/* ---- Own footer ---- */
+.adv-foot {
+  padding: 34px 20px 44px;
+  text-align: center;
+  border-top: 1px solid rgba(200, 169, 94, .3);
+  background: linear-gradient(180deg, transparent, rgba(6, 10, 24, .85));
+}
+.adv-foot__msg {
+  margin: 14px 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 3vw, 1.4rem);
+  letter-spacing: .08em;
+  color: var(--gold-bright);
+}
+.adv-foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  margin: 14px 0 10px;
+}
+.adv-foot__links a { font-size: .74rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.adv-foot__fine { margin: 0; font-size: .78rem; color: var(--muted); }
+
+/* The calendar panel — a gold double frame */
+.page-advent .advent {
+  position: relative;
+  background: linear-gradient(180deg, rgba(14, 22, 46, .92), rgba(9, 14, 32, .94));
+  border: 1px solid var(--gold);
+  box-shadow:
+    inset 0 0 0 4px #090e20,
+    inset 0 0 0 5px rgba(200, 169, 94, .4),
+    0 18px 60px rgba(0, 0, 0, .5),
+    0 0 48px rgba(179, 32, 47, .14);
+}
+.page-advent .advent__head { border-bottom-color: rgba(200, 169, 94, .3); padding: 22px 26px 18px; }
+.page-advent .advent__month {
+  font-size: 1.55rem;
+  color: var(--gold-bright);
+  text-shadow: 0 0 18px rgba(236, 211, 152, .3);
+}
+.page-advent .advent__sub { color: var(--adv-ice); opacity: .8; }
+.page-advent .advent__legend .advent__ico { color: var(--gold); }
+.page-advent .advent__status {
+  color: var(--adv-ice);
+  background: linear-gradient(90deg, rgba(191, 228, 255, .07), rgba(179, 32, 47, .08), rgba(191, 228, 255, .07));
+  border-bottom-color: rgba(200, 169, 94, .25);
+  text-align: center;
+}
+.page-advent .advent__body { padding: 22px 26px 26px; }
+.page-advent .advent__weekdays { color: var(--gold); }
+.page-advent .advent__weekdays,
+.page-advent .advent__grid { gap: 10px; }
+
+/* Doors are wrapped gifts */
+.page-advent .advent__door {
+  --wrap-a: #a32634;
+  --wrap-b: #66101c;
+  --ribbon: #e2c27a;
+  --plate:  #0a0d16;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, .12);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 5px), var(--ribbon) calc(50% - 5px), var(--ribbon) calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(0deg, transparent calc(50% - 5px), var(--ribbon) calc(50% - 5px), var(--ribbon) calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(160deg, var(--wrap-a), var(--wrap-b));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+.page-advent .advent__door--event {
+  --wrap-a: #21754c;
+  --wrap-b: #0f3c27;
+  --ribbon: #f0dfae;
+}
+.page-advent .advent__door--finale {
+  --wrap-a: #e3c06b;
+  --wrap-b: #8f6f26;
+  --ribbon: #b3202f;
+  border-color: #fff3c4;
+  animation: advent-finale 2.8s ease-in-out infinite alternate;
+}
+@keyframes advent-finale {
+  from { box-shadow: 0 4px 12px rgba(0, 0, 0, .35), 0 0 10px rgba(236, 211, 152, .35); }
+  to   { box-shadow: 0 4px 12px rgba(0, 0, 0, .35), 0 0 26px rgba(236, 211, 152, .8); }
+}
+
+/* Bow */
+.page-advent .advent__door::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 11px;
+  height: 9px;
+  margin-left: -5.5px;
+  border-radius: 50%;
+  background: var(--ribbon);
+  box-shadow: -9px 2px 0 -2px var(--ribbon), 9px 2px 0 -2px var(--ribbon);
+}
+
+/* Number plate in the middle, kind icon in the corner */
+.page-advent .advent__num {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+  background: var(--plate);
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(10, 13, 22, .55);
+}
+.page-advent .advent__door .advent__ico {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 16px;
+  height: 16px;
+  color: #fff;
+  opacity: .9;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .6));
+}
+
+.page-advent .advent__door:hover {
+  transform: translateY(-3px) rotate(-1deg);
+  border-color: var(--gold-bright);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, .45), 0 0 18px rgba(236, 211, 152, .35);
+}
+
+/* Opened: the wrapping falls away and the gift glows from inside */
+.page-advent .advent__door.is-opened {
+  background:
+    radial-gradient(circle at 50% 46%, rgba(255, 240, 190, .55), transparent 68%),
+    linear-gradient(160deg, var(--wrap-a), var(--wrap-b));
+}
+.page-advent .advent__door.is-opened::before { display: none; }
+.page-advent .advent__door.is-opened::after {
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, .9);
+}
+
+/* Locked: frosted over */
+.page-advent .advent__door.is-locked {
+  opacity: 1;
+  filter: saturate(.55) brightness(.72);
+}
+.page-advent .advent__door.is-locked::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, .28), transparent 40%),
+    linear-gradient(180deg, rgba(191, 228, 255, .26), rgba(191, 228, 255, .06));
+  pointer-events: none;
+}
+
+.page-advent .advent__door.is-today {
+  box-shadow: 0 0 0 2px rgba(111, 211, 232, .8), 0 0 22px rgba(111, 211, 232, .5);
+  animation: advent-today 2.2s ease-in-out infinite alternate;
+}
+@keyframes advent-today {
+  from { box-shadow: 0 0 0 2px rgba(111, 211, 232, .8), 0 0 10px rgba(111, 211, 232, .3); }
+  to   { box-shadow: 0 0 0 2px rgba(111, 211, 232, 1),  0 0 28px rgba(111, 211, 232, .75); }
+}
+.page-advent .advent__door.is-selected {
+  border-color: #fff3c4;
+  box-shadow: 0 0 0 2px var(--gold-bright), 0 0 26px rgba(236, 211, 152, .6);
+}
+
+/* Reveal panel */
+.page-advent .advent__detail { border-top-color: rgba(200, 169, 94, .3); }
+.page-advent .advent__hint { color: var(--adv-ice); opacity: .85; }
+.page-advent .advent__detail-card {
+  background: linear-gradient(160deg, rgba(31, 107, 70, .2), rgba(10, 14, 30, .9) 55%);
+  border: 1px solid rgba(200, 169, 94, .45);
+  border-left: 4px solid var(--adv-red);
+  box-shadow: 0 0 30px rgba(236, 211, 152, .08);
+}
+.page-advent .advent__detail-card--finale {
+  background: linear-gradient(160deg, rgba(227, 192, 107, .22), rgba(10, 14, 30, .9) 60%);
+  border-color: var(--gold-bright);
+  border-left-color: var(--gold-bright);
+}
+.page-advent .advent__detail-card.is-locked {
+  background: linear-gradient(160deg, rgba(191, 228, 255, .1), rgba(10, 14, 30, .9) 60%);
+  border-left-color: var(--adv-ice);
+}
+.page-advent .advent__detail-card h3 { color: var(--gold-bright); }
+.page-advent .advent__emoji { font-size: 1.15em; }
+
+@media (max-width: 680px) {
+  .adv-bar { padding: 12px 14px; }
+  .adv-bar__links { gap: 14px; }
+  .adv-bar__links a:nth-child(n+3) { display: none; }
+  .adv-hero { padding-top: 100px; }
+  .adv-hero::before { width: 420px; height: 420px; margin-left: -210px; top: 250px; }
+  .adv-crystal--b, .adv-crystal--e { display: none; }
+  .adv-crystal { width: 24px; height: 48px; }
+  .adv-crystal--c, .adv-crystal--f { width: 20px; height: 40px; }
+  .adv-gems { gap: 12px; }
+}
+
+@media (max-width: 680px) {
+  .page-advent .advent__head { padding: 16px 14px 14px; }
+  .page-advent .advent__body { padding: 14px 10px 18px; }
+  .page-advent .advent__weekdays,
+  .page-advent .advent__grid { gap: 6px; }
+  .page-advent .advent__num { width: 1.6rem; height: 1.6rem; font-size: .8rem; box-shadow: 0 0 0 2px rgba(10, 13, 22, .55); }
+  .page-advent .advent__door .advent__ico { width: 11px; height: 11px; right: 3px; bottom: 3px; }
+  .page-advent .advent__door::before { width: 8px; height: 6px; margin-left: -4px; top: -4px; box-shadow: -7px 1px 0 -2px var(--ribbon), 7px 1px 0 -2px var(--ribbon); }
+  .page-advent .advent__door.is-opened::after { top: 4px; right: 4px; width: 5px; height: 5px; }
+  .advent-lights { top: 46px; height: 36px; background-size: 96px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-advent::before, .advent-lights, .advent-aurora, .adv-crystal, .adv-gems svg, .adv-tree .orn, .adv-tree .topper, .page-advent .advent__door--finale, .page-advent .advent__door.is-today { animation: none; }
+  .advent-sky { display: none; }
+}
+
+/* --- Morbol Month: seasonal theme for events.html ---------------------------
+   Switched on by initEventsTheme() in main.js (dates are set by EVENTS_THEME in
+   data.js). It re-colours the whole page by swapping the design tokens for a
+   swampy green-and-purple palette, then adds the bog fog, spores and vines. -- */
+body.theme-morbol {
+  --bg:          #070d09;
+  --bg-alt:      #0c150e;
+  --panel:       #111d14;
+  --panel-hi:    #182a1c;
+  --line:        #2b4130;
+  --gold:        #9fc33a;
+  --gold-bright: #d3ee6f;
+  --crystal:     #b88cf2;
+  --text:        #e4edd9;
+  --muted:       #94a88c;
+  background:
+    radial-gradient(900px 520px at 12% 0%, rgba(120, 160, 40, .2), transparent 62%),
+    radial-gradient(800px 600px at 92% 38%, rgba(110, 60, 150, .17), transparent 62%),
+    linear-gradient(180deg, #070d09 0%, #0a150c 58%, #060b07 100%);
+  background-attachment: fixed;
+}
+.theme-morbol .brand__mark { stroke: var(--gold); }
+.theme-morbol .site-header { background: rgba(7, 13, 9, .92); }
+
+/* Drifting bog fog */
+.mb-bog {
+  position: fixed;
+  inset: -10%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .75;
+  filter: blur(34px);
+  background:
+    radial-gradient(420px 300px at 18% 72%, rgba(140, 175, 50, .24), transparent 70%),
+    radial-gradient(520px 360px at 78% 82%, rgba(120, 70, 165, .22), transparent 70%),
+    radial-gradient(380px 280px at 56% 34%, rgba(175, 195, 60, .14), transparent 70%);
+  animation: mb-drift 24s ease-in-out infinite alternate;
+}
+@keyframes mb-drift {
+  from { transform: translate(-3%, 2%) scale(1); }
+  to   { transform: translate(4%, -3%) scale(1.14); }
+}
+
+/* Rising spores */
+.mb-spores { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.mb-spore {
+  position: absolute;
+  bottom: -24px;
+  border-radius: 50%;
+  border: 1px solid rgba(190, 232, 110, .55);
+  background: radial-gradient(circle at 32% 30%, rgba(225, 255, 160, .5), rgba(140, 190, 60, .1));
+  animation-name: mb-rise, mb-spore-sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-direction: normal, alternate;
+}
+@keyframes mb-rise {
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: .85; }
+  100% { transform: translateY(-112vh); opacity: 0; }
+}
+@keyframes mb-spore-sway { from { translate: -16px 0; } to { translate: 16px 0; } }
+
+.theme-morbol main,
+.theme-morbol .site-footer { position: relative; z-index: 1; }
+
+/* Banner */
+.theme-morbol .page-banner {
+  position: relative;
+  overflow: hidden;
+  padding-top: clamp(66px, 8vw, 92px);
+  background:
+    radial-gradient(700px 320px at 20% 0%, rgba(150, 190, 50, .17), transparent 65%),
+    radial-gradient(520px 260px at 86% 10%, rgba(120, 70, 165, .16), transparent 65%),
+    linear-gradient(180deg, #0b150d, var(--bg));
+}
+.theme-morbol .page-banner .eyebrow::before { content: "\2248\00a0"; }
+.theme-morbol .page-banner .eyebrow::after  { content: "\00a0\2248"; }
+.theme-morbol .page-banner h1,
+.theme-morbol .hero h1 {
+  width: fit-content;
+  background: linear-gradient(180deg, #f2ffb8 0%, #a9d13d 55%, #5f8a22 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 16px rgba(160, 200, 60, .3));
+  transform-origin: left bottom;
+  animation: mb-squelch 3.2s ease-in-out infinite;
+}
+@keyframes mb-squelch {
+  0%, 100% { transform: scale(1, 1); }
+  50%      { transform: scale(1.018, .975); }
+}
+.mb-kicker { margin: 0 0 .7rem; font-style: italic; color: #c8e08a; }
+
+/* Vines draped across the top of the banner */
+.mb-vines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  pointer-events: none;
+  transform-origin: top center;
+  background-repeat: repeat-x;
+  background-size: 160px 46px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='46' viewBox='0 0 160 46'%3E%3Cg fill='none' stroke='%2340802c' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M0 10 C40 34 80 -6 120 18 S160 10 160 10'/%3E%3Cpath d='M52 21 q-5 12 2 21'/%3E%3Cpath d='M128 14 q7 11 0 24'/%3E%3C/g%3E%3Cg fill='%2368ad3b'%3E%3Cellipse cx='28' cy='25' rx='8' ry='3.4' transform='rotate(35 28 25)'/%3E%3Cellipse cx='92' cy='7' rx='8' ry='3.4' transform='rotate(-30 92 7)'/%3E%3Cellipse cx='142' cy='20' rx='7' ry='3' transform='rotate(25 142 20)'/%3E%3C/g%3E%3Ccircle cx='60' cy='19' r='3.6' fill='%238c5fcc'/%3E%3Ccircle cx='118' cy='17' r='3.2' fill='%23c6e45a'/%3E%3Ccircle cx='54' cy='43' r='3' fill='%238c5fcc'/%3E%3Ccircle cx='129' cy='39' r='3' fill='%23c6e45a'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .5));
+  animation: mb-sway 5s ease-in-out infinite alternate;
+}
+@keyframes mb-sway { from { transform: skewX(-1.6deg); } to { transform: skewX(1.6deg); } }
+
+/* Calendar and details pick up the swamp palette */
+.theme-morbol .cal {
+  border-color: rgba(159, 195, 58, .4);
+  box-shadow: 0 0 44px rgba(120, 160, 40, .13);
+}
+.theme-morbol .cal__cell--today { background: rgba(159, 195, 58, .09); }
+.theme-morbol .cal__bar:hover { animation: mb-wiggle .45s ease-in-out; }
+@keyframes mb-wiggle {
+  0%, 100% { transform: rotate(0); }
+  30% { transform: rotate(-1.4deg); }
+  70% { transform: rotate(1.4deg); }
+}
+.theme-morbol .card:hover,
+.theme-morbol .member:hover { border-color: rgba(159, 195, 58, .5); }
+.theme-morbol .section--alt { border-block-color: rgba(159, 195, 58, .25); }
+
+/* Home hero gets the swamp treatment too */
+.theme-morbol .hero {
+  background:
+    radial-gradient(900px 500px at 72% 12%, rgba(120, 70, 165, .22), transparent 60%),
+    radial-gradient(700px 500px at 18% 85%, rgba(150, 190, 50, .18), transparent 60%),
+    linear-gradient(180deg, #0b150d 0%, var(--bg) 100%);
+}
+.theme-morbol .hero .mb-vines { z-index: 2; }
+.theme-morbol .hero__inner { padding-top: 96px; }
+.theme-morbol .hero__tag {
+  color: var(--gold-bright);
+  border-color: rgba(159, 195, 58, .4);
+  background: rgba(159, 195, 58, .08);
+}
+.theme-morbol .hero__tag::before { background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+.theme-morbol .hero__lead { color: #bcd0b0; }
+
+@media (max-width: 680px) {
+  .mb-vines { height: 38px; background-size: 120px 35px; }
+  .theme-morbol .page-banner { padding-top: 58px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mb-bog, .mb-vines, .theme-morbol .page-banner h1, .theme-morbol .hero h1, .theme-morbol .cal__bar:hover { animation: none; }
+  .mb-spores { display: none; }
+}
+
 /* --- Responsive --------------------------------------------------------- */
 @media (max-width: 900px) {
   .grid--4 { grid-template-columns: repeat(2, 1fr); }

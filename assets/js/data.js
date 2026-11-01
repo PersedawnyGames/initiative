@@ -94,6 +94,9 @@ const EVENT_TYPE_COLORS = {
              more than one day (inclusive). E.g. a fan meet from the 10th to
              the 12th: date: '2026-09-10', endDate: '2026-09-12'. Leave it
              out for a normal one-night event and it's just that one day.
+   adventDay: (optional) the day of the December advent calendar this event
+             belongs to — it shows as "???" until that day, then takes its real
+             title and details from the ADVENT list further down.
    time:     free text  ·  type: short label — give it a color above so it
              shows up on the calendar, otherwise it's just gold
 -------------------------------------------------------------------------- */
@@ -124,6 +127,18 @@ const EVENTS = [
     type: 'FC Month'
   },
   {
+    date: '2026-11-01',
+    endDate: '2026-11-30',
+    title: 'Color Me Contagious',
+    type: 'FC Month'
+  },
+  {
+    date: '2026-11-01',
+    endDate: '2026-11-30',
+    title: 'Official Morbol Art Competition',
+    type: 'FC Month'
+  },
+  {
     date: '2026-09-09',
     endDate: '2026-10-19',
     title: 'Moogle Treasure Trove: The First Hunt for Astronomy',
@@ -150,6 +165,32 @@ const EVENTS = [
     title: 'All Saints’ Wake 2026',
     type: 'FF14',
     detail: 'Official seasonal Halloween event — "A Grisly Affair of Mortals and Bears". Requires level 15; speak with the Pumpkin-headed Apparition in Old Gridania (X:10.2, Y:9.4) to begin. Rewards include spooky armor and furnishings, and a peddler sells items from previous years’ events. Seasonal quests can’t be completed once the event ends. Runs 15 Oct, 8:00 GMT – 2 Nov, 14:59 GMT (dates may change).'
+  },
+  {
+    date: '2026-10-28',
+    endDate: '2027-02-23',
+    title: 'Keybound Brawler: FFXIV x FFVII Remake',
+    type: 'FF14',
+    detail: 'Official Final Fantasy VII Remake collaboration at the Manderville Gold Saucer. Requires level 15 and one of the early MSQ quests "The Gridanian Envoy", "The Ul’dahn Envoy" or "The Lominsan Envoy", plus "It Could Happen to You" — then take "Keyward Bound" from Catlike Mammet at the Gold Saucer. A keyboard is required. Play Keybound Brawler to earn MGC and exchange it for Avalanche gear, a Wind-up Barret, orchestrion rolls and more (MGC can only be earned during the event). Runs from 28 Oct, 8:00 GMT until Patch 8.0 (Evercold) releases.'
+  },
+  {
+    date: '2026-11-04',
+    title: 'Evercold Pre-orders Open',
+    type: 'FF14',
+    detail: 'Pre-orders for FINAL FANTASY XIV: Evercold open on the official store.'
+  },
+  {
+    date: '2026-11-10',
+    title: 'Patch 7.58',
+    type: 'FF14',
+    detail: 'Patch 7.58 goes live after maintenance. Crystalline Conflict Season 21 ends and the final results are announced the same day.'
+  },
+  {
+    date: '2027-02-19',
+    endDate: '2027-02-23',
+    title: 'FFXIV: Evercold Launch',
+    type: 'FF14',
+    detail: 'The Evercold expansion (Patch 8.0). Early access begins Friday 19 Feb 2027 at 9:00 GMT; full launch is Tuesday 23 Feb 2027.'
   },
   {
     date: '2026-09-18',
@@ -285,8 +326,40 @@ const EVENTS = [
   {
     date: '2026-11-07',
     time: '20:00 ST',
-    title: 'Stormblood Mount Farm',
+    title: 'Morbol Parade + Kugane Speed-Run',
+    type: 'Event',
+    detail: 'A Morbol Parade followed by a Kugane speed-run.'
+  },
+  {
+    date: '2026-11-11',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
+  },
+  {
+    date: '2026-11-14',
+    title: 'Fate Farming + Hide and Seek',
+    type: 'Event',
+    detail: 'Fate Farming starts earlier than usual — check Discord for the exact start time — followed by Hide and Seek.'
+  },
+  {
+    date: '2026-11-21',
+    time: '20:00 ST',
+    title: 'Aurum Vale Speed-Run',
     type: 'Raid'
+  },
+  {
+    date: '2026-11-25',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
+  },
+  {
+    date: '2026-11-28',
+    time: '20:00 ST',
+    title: 'M.O.R.B.O.L Pic Hunt + Glam Contest',
+    type: 'Event',
+    detail: 'A picture hunt across the three main cities, followed by a Glam Contest.'
   },
   {
     date: '2026-11-04',
@@ -294,6 +367,115 @@ const EVENTS = [
     title: 'Sprout Night',
     type: 'Raid',
     detail: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.'
+  },
+  {
+    date: '2026-11-06',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-11-13',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-11-20',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-11-27',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-12-04',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-12-11',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-12-18',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-12-25',
+    time: '20:00 ST',
+    title: 'Friendslop Friday',
+    type: 'Game Night'
+  },
+  {
+    date: '2026-12-02',
+    time: '20:00 ST',
+    title: 'Sprout Night',
+    type: 'Raid',
+    detail: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.'
+  },
+  {
+    date: '2026-12-09',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
+  },
+  {
+    date: '2026-12-23',
+    time: '20:00 ST',
+    title: 'Treasure Maps',
+    type: 'Treasure Maps'
+  },
+  {
+    date: '2026-12-05',
+    title: '???',
+    type: 'Event',
+    adventDay: 5
+  },
+  {
+    date: '2026-12-06',
+    title: '???',
+    type: 'Event',
+    adventDay: 6
+  },
+  {
+    date: '2026-12-12',
+    title: '???',
+    type: 'Event',
+    adventDay: 12
+  },
+  {
+    date: '2026-12-13',
+    title: '???',
+    type: 'Event',
+    adventDay: 13
+  },
+  {
+    date: '2026-12-19',
+    title: '???',
+    type: 'Event',
+    adventDay: 19
+  },
+  {
+    date: '2026-12-20',
+    title: '???',
+    type: 'Event',
+    adventDay: 20
+  },
+  {
+    date: '2026-12-24',
+    title: '???',
+    type: 'Event',
+    adventDay: 24
   }
 ];
 
@@ -329,7 +511,7 @@ const ACTIVITIES = [
 const SPROUT_NIGHT_CONTENT = [
   {
     category: 'Extremes',
-    items: ['A Realm Reborn', 'Heavensward']
+    items: ['A Realm Reborn', 'Heavensward', 'Stormblood']
   },
   {
     category: 'Deep Dungeons',
@@ -340,3 +522,62 @@ const SPROUT_NIGHT_CONTENT = [
     items: ['The Binding Coil of Bahamut']
   }
 ];
+
+/* --- Advent calendar (advent.html) ---------------------------------------
+   One door per day. Edit the titles and text here — the page builds itself.
+     day     the day of the month (1–24)
+     kind    'daily'  = a daily surprise (gift icon)
+             'event'  = a live FC event (star icon)
+             'finale' = the Christmas finale (crown icon)
+     emoji   shown next to the title once the door is opened
+     extras  (optional) more things on the same day — a list of { emoji, title, text }
+   lockByDate  true = each door only opens on its own date (add ?preview to the
+               page address to open them all early); false = every door opens
+               on click, any time.
+-------------------------------------------------------------------------- */
+const ADVENT = {
+  year: 2026,
+  month: 12,
+  lockByDate: true,    // true = doors unlock on their own date; false = every door opens on click
+  days: [
+    { day: 1,  kind: 'daily',  emoji: '🎄', title: 'Starlight Welcome',        text: 'Holiday greeting and festive FC announcement.' },
+    { day: 2,  kind: 'event',  emoji: '🌱', title: 'Sprout Night',             text: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.' },
+    { day: 3,  kind: 'daily',  emoji: '🎁', title: 'Mystery Gift',             text: 'Chance to win a random minion, dye, or small prize.' },
+    { day: 4,  kind: 'daily',  emoji: '📸', title: 'Screenshot Hunt',          text: 'Guess an Eorzean location from a screenshot.' },
+    { day: 5,  kind: 'event',  emoji: '🏇', title: 'Festive Mount Parade',     text: 'Bring your favorite mount for a parade through Gridania — prizes for the coolest and the silliest rides.' },
+    { day: 6,  kind: 'event',  emoji: '🎅', title: 'Hide & Seek',              text: 'Find the hidden Santa somewhere in Eorzea.' },
+    { day: 7,  kind: 'daily',  emoji: '💌', title: 'Moogle Message',           text: 'A cute message or compliment for an FC member.' },
+    { day: 8,  kind: 'daily',  emoji: '🎲', title: 'Lucky Roll',               text: 'Roll for a chance to win a small prize.' },
+    { day: 9,  kind: 'event',  emoji: '🗺️', title: 'Treasure Maps',            text: 'Group treasure maps, portals, and loot!',
+      extras: [{ emoji: '🕵️', title: 'Guess the NPC', text: 'Identify an FFXIV character from three clues.' }] },
+    { day: 10, kind: 'daily',  emoji: '🔮', title: 'Festive Fortune',          text: 'Receive a silly Eorzean holiday prediction.' },
+    { day: 11, kind: 'daily',  emoji: '🐸', title: 'Glam Challenge',           text: 'Share your most cursed winter outfit.' },
+    { day: 12, kind: 'event',  emoji: '👗', title: 'Starlight Glamour Contest', text: 'Live fashion show with prizes for the cutest, funniest, and most creative outfits.' },
+    { day: 13, kind: 'event',  emoji: '🐥', title: 'Gold Saucer Games',        text: 'Chocobo racing, Triple Triad, and mini-game competitions.' },
+    { day: 14, kind: 'daily',  emoji: '🐱', title: 'Minion Monday',            text: 'Show everyone your favorite minion.' },
+    { day: 15, kind: 'daily',  emoji: '📖', title: 'Lore Quiz',                text: 'Answer a tricky Eorzean lore question.' },
+    { day: 16, kind: 'daily',  emoji: '🎁', title: 'Secret Santa',             text: 'Sign up and receive your gift exchange assignment.' },
+    { day: 17, kind: 'daily',  emoji: '🔎', title: 'Where Am I?',              text: 'Guess a mystery location in FFXIV.' },
+    { day: 18, kind: 'daily',  emoji: '📷', title: 'FC Memories',              text: 'Share your favorite FC screenshot or memory from this year.' },
+    { day: 19, kind: 'event',  emoji: '🧩', title: 'Starlight Scavenger Hunt', text: 'Solve riddles and explore Eorzea together to find hidden prizes.' },
+    { day: 20, kind: 'event',  emoji: '⚔️', title: 'Chaotic Duty Night',       text: 'Run group duties with silly challenges and fun restrictions.' },
+    { day: 21, kind: 'daily',  emoji: '❤️', title: 'Kindness Day',             text: 'Do something nice for another adventurer.' },
+    { day: 22, kind: 'daily',  emoji: '🎯', title: 'Holiday Bingo',            text: 'Complete some easy FFXIV-themed bingo tasks.' },
+    { day: 23, kind: 'event',  emoji: '🗺️', title: 'Treasure Maps',            text: 'Group treasure maps, portals, and loot! Everyone who joins also gets a raffle ticket and a teaser for the grand finale.' },
+    { day: 24, kind: 'finale', emoji: '🎄', title: 'Grand Starlight Finale',   text: 'Secret Santa gift exchange, FC group photo, and grand Christmas raffle!' }
+  ]
+};
+
+/* --- Seasonal theme for the Events page ---------------------------------
+   Between `from` and `to` (inclusive, YYYY-MM-DD) events.html wears the
+   "Morbol Month" look. Outside those dates it goes back to normal by itself.
+   Try it any time by adding ?theme=morbol to any page URL (not the Advent page)
+-------------------------------------------------------------------------- */
+const EVENTS_THEME = {
+  name: 'morbol',
+  from: '2026-11-01',
+  to:   '2026-11-30',
+  label: 'Morbol Month',
+  kicker: 'Heads up: the whole FC is Morbol-ized this month. Expect vines, spores and a faint, lingering smell.',
+  calendarTitle: 'The Morbol calendar'
+};
