@@ -519,7 +519,7 @@ const SPROUT_NIGHT_CONTENT = [
   },
   {
     category: 'Raids',
-    items: ['The Binding Coil of Bahamut']
+    items: ['The Binding Coil of Bahamut', 'Alexander']
   }
 ];
 
