@@ -326,40 +326,43 @@ const EVENTS = [
   {
     date: '2026-11-07',
     time: '20:00 ST',
-    title: 'Morbol Parade + Kugane Speed-Run',
+    title: 'Morbol Parade & Kugane Tower Speedrun',
     type: 'Event',
-    detail: 'A Morbol Parade followed by a Kugane speed-run.'
+    detail: 'Dress up in your funniest Morbol-inspired outfit (green and purple are mandatory) and join the parade, then race through Kugane Tower for a chance to win 1 MILLION GILS! Open to everyone, even non-FC members!'
   },
   {
     date: '2026-11-11',
     time: '20:00 ST',
-    title: 'Treasure Maps',
-    type: 'Treasure Maps'
+    title: 'Endwalker Treasure Hunt',
+    type: 'Treasure Maps',
+    detail: 'Grab your maps, gather your friends and embark on an Endwalker treasure hunt filled with riches and surprises!'
   },
   {
     date: '2026-11-14',
-    title: 'Fate Farming + Hide and Seek',
-    type: 'Event',
-    detail: 'Fate Farming starts earlier than usual — check Discord for the exact start time — followed by Hide and Seek.'
+    time: '20:00 ST',
+    title: 'Aurum Vale Speedrun Challenge',
+    type: 'Raid',
+    detail: 'Think you can conquer Aurum Vale faster than anyone else? Join our Morbol speedrun competition (rules will be dispensed by the officers before the event).'
   },
   {
     date: '2026-11-21',
-    time: '20:00 ST',
-    title: 'Aurum Vale Speed-Run',
-    type: 'Raid'
+    title: 'FATEs, Morbols & Hide and Seek',
+    type: 'Event',
+    detail: 'Farm FATEs in your funniest outfits, then get ready for a wild game of Morbol hide and seek!'
   },
   {
     date: '2026-11-25',
     time: '20:00 ST',
-    title: 'Treasure Maps',
-    type: 'Treasure Maps'
+    title: 'Treasure Hunt',
+    type: 'Treasure Maps',
+    detail: 'Another treasure hunt awaits! Grab your maps and get ready for an evening of adventure, loot and unexpected surprises!'
   },
   {
     date: '2026-11-28',
     time: '20:00 ST',
-    title: 'M.O.R.B.O.L Pic Hunt + Glam Contest',
+    title: 'M.O.R.B.O.L. Scavenger Hunt & Glam Contest',
     type: 'Event',
-    detail: 'A picture hunt across the three main cities, followed by a Glam Contest.'
+    detail: 'Complete 6 mysterious objectives, collect the letters M.O.R.B.O.L., then show off your finest glam in a fabulous fashion showdown!'
   },
   {
     date: '2026-11-04',
