@@ -192,7 +192,10 @@
             altOf: extra.altOf || '', alts: [], hidden: !!extra.hidden
           };
         })
-        .filter(function (m) { return m && !m.hidden; });
+        .filter(function (m) {
+          if (!m || m.hidden) return false;
+          return typeof ROSTER_SHOW === 'undefined' || ROSTER_SHOW.indexOf(m.rankLabel) !== -1;
+        });
 
       var byId = {};
       list.forEach(function (m) { byId[m.id] = m; });

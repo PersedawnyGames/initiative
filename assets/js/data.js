@@ -40,6 +40,11 @@ const RANKS = [
    (a member's `rankLabel` below, or else their rank's label above). */
 const ROSTER_ORDER = ['Emperor', 'Overseer', 'High Council', 'Council'];
 
+/* Which of those titles actually appear on the roster page. Anything not
+   listed here (e.g. 'High Council') is left off. Remove this constant, or add
+   a title back to the list, to show it again. */
+const ROSTER_SHOW = ['Emperor', 'Overseer', 'Council'];
+
 /* --- Roster --------------------------------------------------------------
    One row per character. Anyone on the Lodestone member list holding one of
    the RANKS above appears on the roster page automatically.
