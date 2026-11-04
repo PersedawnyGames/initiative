@@ -7,6 +7,6 @@
    Never paste the "service_role" / "secret" key here.
    ========================================================================== */
 window.SPROUT_CONFIG = {
-  supabaseUrl: '',      // e.g. 'https://abcdefghijkl.supabase.co'
-  supabaseKey: ''       // the "anon" / "publishable" key
+  supabaseUrl: 'https://fpqfqvwiunotaupqyyrv.supabase.co',
+  supabaseKey: 'sb_publishable_4HVcN_lUX-jMdwgp-FLEmg_8DgahPgy'   // publishable key (safe to be public)
 };
