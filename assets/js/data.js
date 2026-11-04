@@ -99,6 +99,13 @@ const EVENT_TYPE_COLORS = {
              title and details from the ADVENT list further down.
    time:     free text  ·  type: short label — give it a color above so it
              shows up on the calendar, otherwise it's just gold
+   content:  (optional, Sprout Night only) what we're running that night,
+             e.g. content: 'Shadowbringers Extremes' — it shows on the
+             sign-up page (sprout.html). Every event titled "Sprout Night"
+             gets its own sign-up automatically.
+   mounts:   (optional, Sprout Night only) which mount sets can drop, so
+             people can tick the ones they still need — e.g.
+             mounts: ['hw-extremes']. The sets are in SPROUT_MOUNTS below.
 -------------------------------------------------------------------------- */
 const EVENTS = [
   {
@@ -525,6 +532,121 @@ const SPROUT_NIGHT_CONTENT = [
     items: ['The Binding Coil of Bahamut', 'Alexander']
   }
 ];
+
+/* --- Sprout Night mounts --------------------------------------------------
+   Which mounts can drop from the content we run. On the sign-up page people
+   tick the ones they still need, and the roster counts them up.
+
+   To use a set on a night, add  mounts: ['set-name']  to that Sprout Night
+   in EVENTS above, e.g.  mounts: ['hw-extremes']. You can list more than
+   one set for a night: mounts: ['arr-extremes', 'hw-extremes'].
+
+   Checked against the FFXIV Online Wiki (Extreme Trial mounts list).
+   `reward` is the mount you get for collecting the whole set (via a quest);
+   it's shown as a hint, not something people tick.
+-------------------------------------------------------------------------- */
+const SPROUT_MOUNTS = {
+  'arr-extremes': {
+    label: 'A Realm Reborn Extremes',
+    mounts: [
+      { name: 'Aithon',    from: 'The Bowl of Embers (Extreme), Ifrit' },
+      { name: 'Xanthos',   from: 'The Howling Eye (Extreme), Garuda' },
+      { name: 'Gullfaxi',  from: 'The Navel (Extreme), Titan' },
+      { name: 'Enbarr',    from: 'The Whorleater (Extreme), Leviathan' },
+      { name: 'Markab',    from: 'The Striking Tree (Extreme), Ramuh' },
+      { name: 'Boreas',    from: 'The Akh Afah Amphitheatre (Extreme), Shiva' },
+      { name: 'Nightmare', from: 'Rare drop in Bowl of Embers, Navel or Howling Eye (Extreme). Not needed for Kirin' }
+    ],
+    reward: { name: 'Kirin', how: 'Quest "A Legend for a Legend" after all six horses (Nightmare not needed)' }
+  },
+
+  'hw-extremes': {
+    label: 'Heavensward Extremes',
+    mounts: [
+      { name: 'White Lanner',   from: 'The Limitless Blue (Extreme), Bismarck' },
+      { name: 'Rose Lanner',    from: 'Thok ast Thok (Extreme), Ravana' },
+      { name: 'Round Lanner',   from: "The Minstrel's Ballad: Thordan's Reign" },
+      { name: 'Warring Lanner', from: 'Containment Bay S1T7 (Extreme), Sephirot' },
+      { name: 'Dark Lanner',    from: "The Minstrel's Ballad: Nidhogg's Rage" },
+      { name: 'Sophic Lanner',  from: 'Containment Bay P1T6 (Extreme), Sophia' },
+      { name: 'Demonic Lanner', from: 'Containment Bay Z1T9 (Extreme), Zurvan' }
+    ],
+    reward: { name: 'Firebird', how: 'Quest "Fiery Wings, Fiery Hearts" after all seven lanners' }
+  },
+
+  'sb-extremes': {
+    label: 'Stormblood Extremes',
+    mounts: [
+      { name: 'Reveling Kamuy',   from: 'The Pool of Tribute (Extreme), Susano' },
+      { name: 'Blissful Kamuy',   from: 'Emanation (Extreme), Lakshmi' },
+      { name: 'Legendary Kamuy',  from: "The Minstrel's Ballad: Shinryu's Domain" },
+      { name: 'Auspicious Kamuy', from: 'The Jade Stoa (Extreme), Byakko' },
+      { name: 'Lunar Kamuy',      from: "The Minstrel's Ballad: Tsukuyomi's Pain" },
+      { name: 'Euphonious Kamuy', from: "Hells' Kier (Extreme), Suzaku" },
+      { name: 'Hallowed Kamuy',   from: 'The Wreath of Snakes (Extreme), Seiryu' }
+    ],
+    reward: { name: 'Kamuy of the Nine Tails', how: 'Quest "A Lone Wolf No More" after all seven kamuy' }
+  },
+
+  'shb-extremes': {
+    label: 'Shadowbringers Extremes',
+    mounts: [
+      { name: 'Fae Gwiber',      from: 'The Dancing Plague (Extreme), Titania' },
+      { name: 'Innocent Gwiber', from: 'The Crown of the Immaculate (Extreme), Innocence' },
+      { name: 'Shadow Gwiber',   from: "The Minstrel's Ballad: Hades's Elegy" },
+      { name: 'Ruby Gwiber',     from: 'Cinder Drift (Extreme), Ruby Weapon' },
+      { name: 'Gwiber of Light', from: 'The Seat of Sacrifice (Extreme), Warrior of Light' },
+      { name: 'Emerald Gwiber',  from: 'Castrum Marinum (Extreme), Emerald Weapon' },
+      { name: 'Diamond Gwiber',  from: 'The Cloud Deck (Extreme), Diamond Weapon' }
+    ],
+    reward: { name: 'Landerwaffe', how: 'Quest "The Dragon Made" after all seven gwibers' }
+  },
+
+  'ew-extremes': {
+    label: 'Endwalker Extremes',
+    mounts: [
+      { name: 'Lynx of Eternal Darkness', from: "The Minstrel's Ballad: Zodiark's Fall" },
+      { name: 'Lynx of Divine Light',     from: "The Minstrel's Ballad: Hydaelyn's Call" },
+      { name: 'Bluefeather Lynx',         from: "The Minstrel's Ballad: Endsinger's Aria" },
+      { name: 'Lynx of Imperious Wind',   from: "Storm's Crown (Extreme), Barbariccia" },
+      { name: 'Lynx of Righteous Fire',   from: 'Mount Ordeals (Extreme), Rubicante' },
+      { name: 'Lynx of Fallen Shadow',    from: 'The Voidcast Dais (Extreme), Golbez' },
+      { name: 'Lynx of Abyssal Grief',    from: 'The Abyssal Fracture (Extreme), Zeromus' }
+    ],
+    reward: { name: 'Apocryphal Bahamut', how: 'Quest "Wings of Hope" after all seven lynxes' }
+  },
+
+  'dt-extremes': {
+    label: 'Dawntrail Extremes',
+    mounts: [
+      { name: 'Wings of Ruin',           from: 'Worqor Lar Dor (Extreme), Valigarmanda' },
+      { name: 'Wings of Resolve',        from: 'Everkeep (Extreme), Zoraal Ja' },
+      { name: 'Wings of Eternity',       from: "The Minstrel's Ballad: Sphene's Burden" },
+      { name: 'Wings of the Knighthood', from: 'Recollection (Extreme)' },
+      { name: 'Wings of Death',          from: "The Minstrel's Ballad: Necron's Embrace" },
+      { name: 'Wings of Mist',           from: 'Hell on Rails (Extreme)' },
+      { name: 'Wings of Nihility',       from: 'The Unmaking (Extreme)' }
+    ],
+    reward: { name: 'Wings of Legacy', how: 'Quest "The Wing Spirit Cometh" after all seven wings' }
+  },
+
+  'palace-of-the-dead': {
+    label: 'Palace of the Dead',
+    mounts: [
+      { name: 'Black Pegasus',     from: 'Rare: Night Pegasus Whistle from Gold-trimmed Sacks, floors 151–200' },
+      { name: 'Disembodied Head',  from: '10 Gelmorran Potsherds, traded with E-Una-Kotor at Quarrymill' }
+    ]
+  },
+
+  'alexander-savage': {
+    label: 'Alexander (Savage)',
+    mounts: [
+      { name: 'Gobwalker',  from: 'Alexander - The Burden of the Father (Savage), A4S. 1 per clear, roll for it' },
+      { name: 'Arrhidaeus', from: 'Alexander - The Soul of the Creator (Savage), A12S. 1 per clear, roll for it' }
+    ]
+  }
+  // No mounts drop in The Binding Coil of Bahamut or in normal-mode Alexander.
+};
 
 /* --- Advent calendar (advent.html) ---------------------------------------
    One door per day. Edit the titles and text here — the page builds itself.
