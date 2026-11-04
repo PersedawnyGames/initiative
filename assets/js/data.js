@@ -376,6 +376,8 @@ const EVENTS = [
     time: '20:00 ST',
     title: 'Sprout Night',
     type: 'Raid',
+    content: 'Stormblood Extremes',
+    mounts: ['sb-extremes'],
     detail: 'A run through the content from our earlier FC events — for sprouts and anyone who missed it the first time around.'
   },
   {
