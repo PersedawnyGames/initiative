@@ -113,7 +113,13 @@ Do the same for any other officer who should be able to tidy up the list.
   },
   ```
 
-- **Mounts:** add a `mounts:` line to a Sprout Night so people can tick the mounts
+- **Nights without a plan (the default):** people pick what they'd like to run from
+  the "Content we've run before" list (`SPROUT_NIGHT_CONTENT` in `data.js`) and tick the
+  mounts they still need from it. The roster shows a vote count per content, plus who
+  needs which mount, so you can decide on the night. Add something to that list and
+  it becomes a choice automatically.
+
+- **Nights with a set plan:** add a `mounts:` line to a Sprout Night so people can tick the mounts
   they still need from that content. The roster then shows how many people need each one:
 
   ```js
@@ -125,8 +131,8 @@ Do the same for any other officer who should be able to tidy up the list.
   `sb-extremes`, `shb-extremes`, `ew-extremes`, `dt-extremes`, `palace-of-the-dead`,
   `alexander-savage`. The Binding Coil of Bahamut and normal-mode Alexander drop no mounts.
 
-  *Already ran `setup.sql` before mounts were added?* Just run it once more. It adds
-  the mounts column and leaves existing sign-ups alone.
+  *Already ran `setup.sql` before?* Just run it once more after updating. It adds any
+  new columns and leaves existing sign-ups alone.
 
 - **See all sign-ups / export them:** Supabase → **Table Editor → sprout_signups**.
 - **Past nights** disappear from the page the day after. Their sign-ups stay in the

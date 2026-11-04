@@ -543,6 +543,12 @@ const SPROUT_NIGHT_CONTENT = [
    in EVENTS above, e.g.  mounts: ['hw-extremes']. You can list more than
    one set for a night: mounts: ['arr-extremes', 'hw-extremes'].
 
+   On nights WITHOUT a mounts line, people instead pick what they'd like
+   to run from SPROUT_NIGHT_CONTENT above, then tick the mounts they still
+   need from that. `content: [category, item]` links a set to an entry in
+   that list. Add a new entry there and it shows up as a choice; if a set
+   here has the same [category, item], its mounts come with it.
+
    Checked against the FFXIV Online Wiki (Extreme Trial mounts list).
    `reward` is the mount you get for collecting the whole set (via a quest);
    it's shown as a hint, not something people tick.
@@ -550,6 +556,7 @@ const SPROUT_NIGHT_CONTENT = [
 const SPROUT_MOUNTS = {
   'arr-extremes': {
     label: 'A Realm Reborn Extremes',
+    content: ['Extremes', 'A Realm Reborn'],
     mounts: [
       { name: 'Aithon',    from: 'The Bowl of Embers (Extreme), Ifrit' },
       { name: 'Xanthos',   from: 'The Howling Eye (Extreme), Garuda' },
@@ -564,6 +571,7 @@ const SPROUT_MOUNTS = {
 
   'hw-extremes': {
     label: 'Heavensward Extremes',
+    content: ['Extremes', 'Heavensward'],
     mounts: [
       { name: 'White Lanner',   from: 'The Limitless Blue (Extreme), Bismarck' },
       { name: 'Rose Lanner',    from: 'Thok ast Thok (Extreme), Ravana' },
@@ -578,6 +586,7 @@ const SPROUT_MOUNTS = {
 
   'sb-extremes': {
     label: 'Stormblood Extremes',
+    content: ['Extremes', 'Stormblood'],
     mounts: [
       { name: 'Reveling Kamuy',   from: 'The Pool of Tribute (Extreme), Susano' },
       { name: 'Blissful Kamuy',   from: 'Emanation (Extreme), Lakshmi' },
@@ -592,6 +601,7 @@ const SPROUT_MOUNTS = {
 
   'shb-extremes': {
     label: 'Shadowbringers Extremes',
+    content: ['Extremes', 'Shadowbringers'],
     mounts: [
       { name: 'Fae Gwiber',      from: 'The Dancing Plague (Extreme), Titania' },
       { name: 'Innocent Gwiber', from: 'The Crown of the Immaculate (Extreme), Innocence' },
@@ -606,6 +616,7 @@ const SPROUT_MOUNTS = {
 
   'ew-extremes': {
     label: 'Endwalker Extremes',
+    content: ['Extremes', 'Endwalker'],
     mounts: [
       { name: 'Lynx of Eternal Darkness', from: "The Minstrel's Ballad: Zodiark's Fall" },
       { name: 'Lynx of Divine Light',     from: "The Minstrel's Ballad: Hydaelyn's Call" },
@@ -620,6 +631,7 @@ const SPROUT_MOUNTS = {
 
   'dt-extremes': {
     label: 'Dawntrail Extremes',
+    content: ['Extremes', 'Dawntrail'],
     mounts: [
       { name: 'Wings of Ruin',           from: 'Worqor Lar Dor (Extreme), Valigarmanda' },
       { name: 'Wings of Resolve',        from: 'Everkeep (Extreme), Zoraal Ja' },
@@ -634,6 +646,7 @@ const SPROUT_MOUNTS = {
 
   'palace-of-the-dead': {
     label: 'Palace of the Dead',
+    content: ['Deep Dungeons', 'Palace of the Dead'],
     mounts: [
       { name: 'Black Pegasus',     from: 'Rare: Night Pegasus Whistle from Gold-trimmed Sacks, floors 151–200' },
       { name: 'Disembodied Head',  from: '10 Gelmorran Potsherds, traded with E-Una-Kotor at Quarrymill' }
@@ -642,6 +655,8 @@ const SPROUT_MOUNTS = {
 
   'alexander-savage': {
     label: 'Alexander (Savage)',
+    content: ['Raids', 'Alexander'],
+    note: 'Only drop in Savage',
     mounts: [
       { name: 'Gobwalker',  from: 'Alexander - The Burden of the Father (Savage), A4S. 1 per clear, roll for it' },
       { name: 'Arrhidaeus', from: 'Alexander - The Soul of the Creator (Savage), A12S. 1 per clear, roll for it' }

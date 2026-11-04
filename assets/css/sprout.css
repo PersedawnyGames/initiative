@@ -475,6 +475,60 @@
 }
 .sn-mountpick input:focus-visible + .sn-mountchip { outline: 2px solid var(--crystal); outline-offset: 2px; }
 .sn-hint { margin: 6px 0 0; font-size: .74rem; color: var(--muted); }
+.sn-mountpick__set[hidden], .sn-hint[hidden] { display: none; }
+[data-sn="wish-mounts"] .sn-mountpick__set { margin-bottom: 10px; }
+[data-sn="wish-mounts"] .sn-jobs__title { display: block; margin-bottom: 5px; }
+
+/* Content voting (nights without a set plan) */
+.sn-jobs__group--wide { grid-template-columns: 110px 1fr; }
+.sn-wantchip {
+  padding: 5px 11px;
+  font-size: .8rem;
+  color: var(--muted);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.sn-wantchip:hover { color: var(--text); border-color: rgba(200, 169, 94, .5); }
+.sn-mountpick input:checked + .sn-wantchip,
+.sn-jobs input:checked + .sn-wantchip {
+  color: var(--gold-bright);
+  background: rgba(200, 169, 94, .14);
+  border-color: var(--gold);
+}
+.sn-jobs input:focus-visible + .sn-wantchip { outline: 2px solid var(--crystal); outline-offset: 2px; }
+
+.sn-wishes { margin: 0; padding: 0; list-style: none; }
+.sn-wish { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.sn-wish:last-child { border-bottom: 0; }
+.sn-wish__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.sn-wish__name { font-weight: 600; color: var(--text); }
+.sn-wish__votes {
+  flex-shrink: 0;
+  padding: 1px 9px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+  background: rgba(200, 169, 94, .12);
+  border: 1px solid rgba(200, 169, 94, .45);
+  border-radius: 999px;
+  cursor: help;
+}
+.sn-wish__nomounts { margin: 0; font-size: .78rem; color: var(--muted); }
+.sn-want {
+  padding: 1px 7px;
+  font-size: .7rem;
+  color: var(--gold-bright);
+  background: rgba(200, 169, 94, .1);
+  border: 1px solid rgba(200, 169, 94, .4);
+  border-radius: 3px;
+}
+
+@media (max-width: 420px) {
+  .sn-jobs__group--wide { grid-template-columns: 1fr; }
+}
 
 /* --- Toast --------------------------------------------------------------- */
 .sn-toast {

@@ -35,6 +35,12 @@ alter table public.sprout_signups
   add column if not exists mounts text[] not null default '{}'
   check (cardinality(mounts) <= 60);
 
+-- Content the person would like to run, on nights without a set plan
+-- (e.g. 'Extremes: Heavensward'). Also added later, same upgrade trick.
+alter table public.sprout_signups
+  add column if not exists wanted text[] not null default '{}'
+  check (cardinality(wanted) <= 40);
+
 create index if not exists sprout_signups_night_idx on public.sprout_signups (night);
 
 -- --- Hosts: people who may remove anyone's sign-up ------------------------

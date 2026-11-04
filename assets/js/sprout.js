@@ -241,12 +241,103 @@
     }).join('');
   }
 
+  /* ---- Content people can vote for (nights without a set plan) ---------
+     Built from SPROUT_NIGHT_CONTENT ("Content we've run before"). Each
+     entry gets the mount set from SPROUT_MOUNTS whose `content` matches. */
+  var CONTENT = [];
+  var CONTENT_BY_KEY = {};
+  function buildContent() {
+    if (typeof SPROUT_NIGHT_CONTENT === 'undefined') return;
+    var sets = typeof SPROUT_MOUNTS !== 'undefined' ? SPROUT_MOUNTS : {};
+    SPROUT_NIGHT_CONTENT.forEach(function (group) {
+      (group.items || []).forEach(function (item) {
+        var key = group.category + ': ' + item;
+        var set = null;
+        Object.keys(sets).forEach(function (k) {
+          var c = sets[k].content;
+          if (c && c[0] === group.category && c[1] === item) set = sets[k];
+        });
+        var entry = {
+          key: key,
+          category: group.category,
+          item: item,
+          label: group.category === 'Extremes' ? item + ' Extremes' : item,
+          set: set
+        };
+        CONTENT.push(entry);
+        CONTENT_BY_KEY[key] = entry;
+      });
+    });
+  }
+
+  function isOpenNight(night) { return night && !night.mountSets.length; }
+
+  // Which mount names count for this sign-up on this night.
+  function allowedMounts(night, wanted) {
+    if (!night) return [];
+    if (!isOpenNight(night)) return night.mountNames;
+    var names = [];
+    (wanted || []).forEach(function (k) {
+      var c = CONTENT_BY_KEY[k];
+      if (c && c.set) c.set.mounts.forEach(function (mt) { names.push(mt.name); });
+    });
+    return names;
+  }
+
   function mountPills(r, night) {
-    if (!night || !night.mountNames.length) return '';
-    var need = (r.mounts || []).filter(function (n) { return night.mountNames.indexOf(n) !== -1; });
-    if (!need.length) return '';
-    return '<div class="sn-row__mounts"><span class="sn-row__mounts-label">Needs</span>' +
-      need.map(function (n) { return '<span class="sn-mount">' + esc(n) + '</span>'; }).join('') + '</div>';
+    var ok = allowedMounts(night, r.wanted);
+    var need = (r.mounts || []).filter(function (n) { return ok.indexOf(n) !== -1; });
+    var wants = isOpenNight(night) ? (r.wanted || []).filter(function (k) { return CONTENT_BY_KEY[k]; }) : [];
+    var html = '';
+    if (wants.length) {
+      html += '<div class="sn-row__mounts"><span class="sn-row__mounts-label">Wants</span>' +
+        wants.map(function (k) { return '<span class="sn-want">' + esc(CONTENT_BY_KEY[k].label) + '</span>'; }).join('') + '</div>';
+    }
+    if (need.length) {
+      html += '<div class="sn-row__mounts"><span class="sn-row__mounts-label">Needs</span>' +
+        need.map(function (n) { return '<span class="sn-mount">' + esc(n) + '</span>'; }).join('') + '</div>';
+    }
+    return html;
+  }
+
+  // Nights without a set plan: what do people want to run, and what do they need from it?
+  function renderWishTally(night, rows) {
+    if (!isOpenNight(night) || !CONTENT.length) return '';
+    var active = rows.filter(function (r) { return r.status !== 'out'; });
+    var votes = CONTENT.map(function (c) {
+      var voters = active.filter(function (r) { return (r.wanted || []).indexOf(c.key) !== -1; });
+      var tally = {};
+      if (c.set) {
+        voters.forEach(function (r) {
+          (r.mounts || []).forEach(function (n) {
+            if (c.set.mounts.some(function (mt) { return mt.name === n; })) (tally[n] = tally[n] || []).push(r.character);
+          });
+        });
+      }
+      return { c: c, voters: voters, tally: tally };
+    }).filter(function (v) { return v.voters.length; })
+      .sort(function (a, b) { return b.voters.length - a.voters.length; });
+
+    var body = votes.length ? '<ol class="sn-wishes">' + votes.map(function (v) {
+      var mounts = v.c.set ? v.c.set.mounts.filter(function (mt) { return v.tally[mt.name]; })
+        .sort(function (a, b) { return v.tally[b.name].length - v.tally[a.name].length; }) : [];
+      return '<li class="sn-wish">' +
+        '<div class="sn-wish__head">' +
+          '<span class="sn-wish__name">' + esc(v.c.label) + '</span>' +
+          '<span class="sn-wish__votes" title="' + esc(v.voters.map(function (r) { return r.character; }).join(', ')) + '">' + v.voters.length + (v.voters.length === 1 ? ' wants it' : ' want it') + '</span>' +
+        '</div>' +
+        (mounts.length ? '<ul class="sn-mounts__list">' + mounts.map(function (mt) {
+          var who = v.tally[mt.name];
+          return '<li class="sn-mounts__item is-wanted" title="' + esc(mt.from) + '\nNeeded by: ' + esc(who.join(', ')) + '">' +
+            '<span class="sn-mounts__name">' + esc(mt.name) + '</span><span class="sn-mounts__n">×' + who.length + '</span></li>';
+        }).join('') + '</ul>' : (v.c.set ? '' : '<p class="sn-wish__nomounts">No mounts drop here</p>')) +
+      '</li>';
+    }).join('') + '</ol>'
+      : '<p class="sn-muted sn-mounts__none">' + (active.length ? 'Nobody has picked any content yet.' : 'Sign up and pick what you\'d like to run.') + '</p>';
+
+    return '<section class="sn-mounts">' +
+      '<h3 class="sn-group__title">🗳️ What people want to run</h3>' + body +
+    '</section>';
   }
 
   function renderMountTally(night, rows) {
@@ -291,7 +382,6 @@
     return '<li class="sn-row' + (isMe ? ' is-me' : '') + '">' +
       '<div class="sn-row__main">' +
         '<span class="sn-row__name">' + esc(r.character) + '</span>' +
-        (r.world && r.world.toLowerCase() !== 'alpha' ? '<span class="sn-row__world">' + esc(r.world) + '</span>' : '') +
         (isMe ? '<span class="tag sn-tag-me">You</span>' : '') +
         (exp ? '<span class="sn-row__exp" title="' + esc(exp.label) + '">' + exp.icon + '<span class="sn-row__exp-text">' + esc(exp.label) + '</span></span>' : '') +
       '</div>' +
@@ -374,7 +464,7 @@
       }
     }
 
-    var mounts = sb && state.loaded ? renderMountTally(n, rows) : '';
+    var mounts = sb && state.loaded ? (isOpenNight(n) ? renderWishTally(n, rows) : renderMountTally(n, rows)) : '';
     host.innerHTML = head + (sb ? counts : '') + mounts + '<div class="sn-roster">' + body + '</div>';
   }
 
@@ -400,27 +490,59 @@
     var base = row || state.lastProfile || {};
     var v = {
       character: base.character || '',
-      world: base.world || 'Alpha',
       status: row ? row.status : 'going',
       pref_role: base.pref_role || '',
       jobs: base.jobs || [],
       experience: row ? row.experience : '',
       notes: row ? (row.notes || '') : '',
-      mounts: row ? (row.mounts || []) : []
+      mounts: row ? (row.mounts || []) : [],
+      wanted: row ? (row.wanted || []) : []
     };
     var night = state.nights.find(function (x) { return x.date === state.selected; });
 
+    function mountChip(mt, checked) {
+      var id = 'sn-mount-' + mt.name.replace(/[^a-z0-9]+/gi, '-');
+      return '<input type="checkbox" name="mounts" id="' + id + '" value="' + esc(mt.name) + '"' + (checked ? ' checked' : '') + '>' +
+             '<label for="' + id + '" class="sn-mountchip" title="' + esc(mt.from) + '">' + esc(mt.name) + '</label>';
+    }
+
     var mountField = '';
-    if (night && night.mountSets.length) {
+    if (isOpenNight(night) && CONTENT.length) {
+      // No set plan: pick content to vote for, then the mounts you need from it.
+      var cats = [];
+      CONTENT.forEach(function (c) { if (cats.indexOf(c.category) === -1) cats.push(c.category); });
+      mountField =
+        '<div class="sn-field"><span class="sn-label">What would you like to run? <small>(pick any)</small></span>' +
+          '<div class="sn-jobs">' + cats.map(function (cat) {
+            return '<div class="sn-jobs__group sn-jobs__group--wide"><span class="sn-jobs__title">' + esc(cat) + '</span><div class="sn-mountpick__list">' +
+              CONTENT.filter(function (c) { return c.category === cat; }).map(function (c) {
+                var id = 'sn-want-' + c.key.replace(/[^a-z0-9]+/gi, '-');
+                return '<input type="checkbox" name="wanted" id="' + id + '" value="' + esc(c.key) + '"' + (v.wanted.indexOf(c.key) !== -1 ? ' checked' : '') + '>' +
+                       '<label for="' + id + '" class="sn-wantchip">' + esc(c.item) + '</label>';
+              }).join('') + '</div></div>';
+          }).join('') + '</div>' +
+        '</div>' +
+        '<div class="sn-field" data-sn="wish-mounts"><span class="sn-label">Mounts you still need <small>(from what you picked)</small></span>' +
+          '<div class="sn-mountpick">' + CONTENT.map(function (c) {
+            var on = v.wanted.indexOf(c.key) !== -1;
+            return '<div class="sn-mountpick__set" data-for="' + esc(c.key) + '"' + (on ? '' : ' hidden') + '>' +
+              '<span class="sn-jobs__title">' + esc(c.set ? c.set.label : c.label) + (c.set && c.set.note ? ' · ' + esc(c.set.note) : '') + '</span>' +
+              (c.set
+                ? '<div class="sn-mountpick__list">' + c.set.mounts.map(function (mt) { return mountChip(mt, v.mounts.indexOf(mt.name) !== -1); }).join('') + '</div>'
+                : '<p class="sn-hint">No mounts drop here.</p>') +
+            '</div>';
+          }).join('') + '</div>' +
+          '<p class="sn-hint" data-sn="wish-empty"' + (v.wanted.length ? ' hidden' : '') + '>Pick something above to see its mounts.</p>' +
+          '<p class="sn-hint">On a computer, hover a mount to see where it drops.</p>' +
+        '</div>';
+    } else if (night && night.mountSets.length) {
       mountField =
         '<div class="sn-field"><span class="sn-label">Mounts you still need <small>(optional)</small></span>' +
           '<div class="sn-mountpick">' + night.mountSets.map(function (set, si) {
             return '<div class="sn-mountpick__set">' +
               (night.mountSets.length > 1 ? '<span class="sn-jobs__title">' + esc(set.label) + '</span>' : '') +
-              '<div class="sn-mountpick__list">' + set.mounts.map(function (mt, mi) {
-                var id = 'sn-mount-' + si + '-' + mi;
-                return '<input type="checkbox" name="mounts" id="' + id + '" value="' + esc(mt.name) + '"' + (v.mounts.indexOf(mt.name) !== -1 ? ' checked' : '') + '>' +
-                       '<label for="' + id + '" class="sn-mountchip" title="' + esc(mt.from) + '">' + esc(mt.name) + '</label>';
+              '<div class="sn-mountpick__list">' + set.mounts.map(function (mt) {
+                return mountChip(mt, v.mounts.indexOf(mt.name) !== -1);
               }).join('') + '</div></div>';
           }).join('') + '</div>' +
           '<p class="sn-hint">On a computer, hover a mount to see where it drops.</p>' +
@@ -450,12 +572,8 @@
 
         '<div class="sn-field"><span class="sn-label">Are you coming?</span>' + seg('status', STATUSES, v.status) + '</div>' +
 
-        '<div class="sn-field-row">' +
-          '<label class="sn-field"><span class="sn-label">Character name</span>' +
-            '<input type="text" name="character" maxlength="40" autocomplete="off" placeholder="e.g. Sprouty Moogleton" value="' + esc(v.character) + '" required></label>' +
-          '<label class="sn-field sn-field--world"><span class="sn-label">World</span>' +
-            '<input type="text" name="world" maxlength="20" autocomplete="off" value="' + esc(v.world) + '"></label>' +
-        '</div>' +
+        '<label class="sn-field"><span class="sn-label">Character name</span>' +
+          '<input type="text" name="character" maxlength="40" autocomplete="off" placeholder="e.g. Sprouty Moogleton" value="' + esc(v.character) + '" required></label>' +
 
         '<div class="sn-field"><span class="sn-label">Preferred role</span>' + seg('pref_role', ROLES, v.pref_role) + '</div>' +
 
@@ -485,15 +603,27 @@
   }
 
   /* ---- Data ------------------------------------------------------------ */
-  var COLUMNS = 'id,user_id,night,discord_name,discord_avatar,character,world,status,pref_role,jobs,experience,mounts,notes,created_at,updated_at';
+  var BASE_COLUMNS = 'id,user_id,night,discord_name,discord_avatar,character,status,pref_role,jobs,experience,mounts,notes,created_at,updated_at';
+  // `wanted` was added later. If the database hasn't been updated with the
+  // newest setup.sql yet, carry on without it instead of breaking the page.
+  var hasWanted = true;
+  function columns() { return hasWanted ? BASE_COLUMNS + ',wanted' : BASE_COLUMNS; }
+  function missingWanted(err) {
+    return err && (err.code === '42703' || err.code === 'PGRST204') && /wanted/.test(err.message || '');
+  }
 
   function loadRows() {
     if (!sb || !state.nights.length) { state.loaded = true; return Promise.resolve(); }
     return sb.from('sprout_signups')
-      .select(COLUMNS)
+      .select(columns())
       .gte('night', state.nights[0].date)
       .order('created_at', { ascending: true })
       .then(function (res) {
+        if (res.error && hasWanted && missingWanted(res.error)) {
+          console.warn('[sprout] database has no "wanted" column yet: run supabase/setup.sql again');
+          hasWanted = false;
+          return loadRows();
+        }
         if (res.error) throw res.error;
         state.rows = res.data || [];
         state.loaded = true;
@@ -515,7 +645,7 @@
   function loadMyProfile() {
     if (!state.user) { state.lastProfile = null; return Promise.resolve(); }
     return sb.from('sprout_signups')
-      .select('character,world,pref_role,jobs')
+      .select('character,pref_role,jobs')
       .eq('user_id', state.user.id)
       .order('updated_at', { ascending: false })
       .limit(1)
@@ -551,12 +681,12 @@
     if (saving) return;
     var fd = new FormData(form);
     var night = state.nights.find(function (x) { return x.date === state.selected; });
-    var allowedMounts = night ? night.mountNames : [];
+    var wanted = isOpenNight(night) ? fd.getAll('wanted').filter(function (k) { return CONTENT_BY_KEY[k]; }) : [];
+    var okMounts = allowedMounts(night, wanted);
     var payload = {
-      mounts: fd.getAll('mounts').filter(function (n) { return allowedMounts.indexOf(n) !== -1; }),
+      mounts: fd.getAll('mounts').filter(function (n) { return okMounts.indexOf(n) !== -1; }),
       night: state.selected,
       character: String(fd.get('character') || '').trim().replace(/\s+/g, ' '),
-      world: String(fd.get('world') || '').trim() || 'Alpha',
       status: fd.get('status'),
       pref_role: fd.get('pref_role'),
       jobs: fd.getAll('jobs'),
@@ -571,6 +701,8 @@
     if (!payload.experience) return formError('Let us know if you\'ve done this content before.');
     formError('');
 
+    if (hasWanted) payload.wanted = wanted;
+
     var row = mine(state.selected);
     var btn = el('save');
     saving = true;
@@ -578,8 +710,8 @@
     btn.textContent = 'Saving…';
 
     var req = row
-      ? sb.from('sprout_signups').update(payload).eq('id', row.id).select(COLUMNS).single()
-      : sb.from('sprout_signups').insert(payload).select(COLUMNS).single();
+      ? sb.from('sprout_signups').update(payload).eq('id', row.id).select(columns()).single()
+      : sb.from('sprout_signups').insert(payload).select(columns()).single();
 
     req.then(function (res) {
       if (res.error) throw res.error;
@@ -633,6 +765,16 @@
       }
     });
 
+    // Show the mounts for whatever content is ticked.
+    el('root').addEventListener('change', function (e) {
+      if (e.target.name !== 'wanted') return;
+      var form = e.target.form;
+      var picked = $$('input[name="wanted"]:checked', form).map(function (i) { return i.value; });
+      $$('[data-for]', form).forEach(function (block) { block.hidden = picked.indexOf(block.dataset.for) === -1; });
+      var empty = $('[data-sn="wish-empty"]', form);
+      if (empty) empty.hidden = picked.length > 0;
+    });
+
     el('root').addEventListener('submit', function (e) {
       if (e.target.matches('[data-sn="form"]')) {
         e.preventDefault();
@@ -663,6 +805,7 @@
 
   function init() {
     if (!el('root')) return;
+    buildContent();
     state.nights = collectNights();
     pickSelected();
     bindEvents();
