@@ -32,7 +32,7 @@ const FC = {
 -------------------------------------------------------------------------- */
 const RANKS = [
   { name: 'The Emperor', label: 'Emperor' },
-  { name: 'Regent',      label: 'Regent' },
+  { name: 'Overseer',    label: 'Overseer' },
   { name: 'Council',     label: 'Council' }
 ];
 
@@ -64,13 +64,13 @@ const ROSTER_SHOW = ['Emperor', 'Overseer', 'Council'];
 -------------------------------------------------------------------------- */
 const MEMBERS = [
   { name: 'Cipher Imperius',   discord: 'Cipher',           role: 'Community Leadership',  rank: 'The Emperor', id: '61287057', portrait: 'https://img2.finalfantasyxiv.com/f/8385d4f331e00b9a92abd1dc2322de6d_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789544578' },
-  { name: 'Dino Dan',          discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Regent',      rankLabel: 'Overseer', altOf: '3078113', id: '61277910', portrait: 'https://img2.finalfantasyxiv.com/f/e931fbe7c5b039f2a3017dcab855f1eb_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545688' },
-  { name: 'Lumina Cipher',      discord: '',                 role: '',                      rank: 'Regent',      hidden: true, id: '61342026', portrait: '' },
-  { name: 'Ninja Novak',        discord: '',                 role: '',                      rank: 'Regent',      hidden: true, id: '61355324', portrait: '' },
-  { name: 'Kidagakash Nedakh', discord: 'Kida (Alba)',      role: 'Member Support',        rank: 'Regent',      rankLabel: 'High Council', id: '61302595', portrait: 'https://img2.finalfantasyxiv.com/f/4d1a1d6d3046ff53ad533b185b39a5a2_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545546' },
-  { name: 'Nemo Rosa',         discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Regent',      rankLabel: 'Overseer', id: '3078113', portrait: 'https://img2.finalfantasyxiv.com/f/8c09e967f667289e22af8a7804d36e9e_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545883' },
-  { name: 'Opal Noxfleuret',   discord: 'Opal Noxfleuret',  role: 'Estate Management',     rank: 'Regent',      rankLabel: 'High Council', id: '38510729', portrait: 'https://img2.finalfantasyxiv.com/f/0adce7b73914ddc306318aac1eeea802_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546719' },
-  { name: 'Dawn Undomiel',     discord: 'Dawn Undomiel',    role: 'Events Manager',        rank: 'Council',     rankLabel: 'Overseer',     id: '61417925', portrait: 'https://img2.finalfantasyxiv.com/f/62a93a3aafe9b6af1b2572395ae096ec_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546626' },
+  { name: 'Dino Dan',          discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Overseer',    rankLabel: 'Overseer', altOf: '3078113', id: '61277910', portrait: 'https://img2.finalfantasyxiv.com/f/e931fbe7c5b039f2a3017dcab855f1eb_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545688' },
+  { name: 'Lumina Cipher',      discord: '',                 role: '',                      rank: 'Overseer',    hidden: true, id: '61342026', portrait: '' },
+  { name: 'Ninja Novak',        discord: '',                 role: '',                      rank: 'Overseer',    hidden: true, id: '61355324', portrait: '' },
+  { name: 'Kidagakash Nedakh', discord: 'Kida (Alba)',      role: 'Member Support',        rank: 'Legend',       rankLabel: 'High Council', id: '61302595', portrait: 'https://img2.finalfantasyxiv.com/f/4d1a1d6d3046ff53ad533b185b39a5a2_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545546' },
+  { name: 'Nemo Rosa',         discord: 'Nemo Rosa',        role: 'Member Management',     rank: 'Overseer',    rankLabel: 'Overseer', id: '3078113', portrait: 'https://img2.finalfantasyxiv.com/f/8c09e967f667289e22af8a7804d36e9e_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789545883' },
+  { name: 'Opal Noxfleuret',   discord: 'Opal Noxfleuret',  role: 'Estate Management',     rank: 'Legend',       rankLabel: 'High Council', id: '38510729', portrait: 'https://img2.finalfantasyxiv.com/f/0adce7b73914ddc306318aac1eeea802_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546719' },
+  { name: 'Dawn Undomiel',     discord: 'Dawn Undomiel',    role: 'Events Manager',        rank: 'Overseer',    rankLabel: 'Overseer',     id: '61417925', portrait: 'https://img2.finalfantasyxiv.com/f/62a93a3aafe9b6af1b2572395ae096ec_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789546626' },
   { name: 'Mizuki Sasaki',      discord: 'Summer / Mizuki',  role: 'FC Operations Manager', rank: 'Council',     altOf: '56325437', id: '60104764', portrait: '' },
   { name: 'Pale King',        discord: 'Pale King',        role: 'High-End Content Lead', rank: 'Council',     id: '61342637', portrait: 'https://img2.finalfantasyxiv.com/f/a0de494ee474fe0ebb025b3b81dfc74d_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789547107' },
   { name: 'Summer Cassidy',    discord: 'Summer / Mizuki',  role: 'FC Operations Manager', rank: 'Council',     id: '56325437', portrait: 'https://img2.finalfantasyxiv.com/f/ad695212e542b122edc3d95d88633d83_6132295fcf5570fb8b0a944ef322a598fl0.jpg?1789547815' }
