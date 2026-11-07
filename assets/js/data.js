@@ -99,6 +99,9 @@ const EVENT_TYPE_COLORS = {
              more than one day (inclusive). E.g. a fan meet from the 10th to
              the 12th: date: '2026-09-10', endDate: '2026-09-12'. Leave it
              out for a normal one-night event and it's just that one day.
+   image:    (optional) a picture for the event, e.g. image: 'assets/img/events/2026-11-07.jpg'
+             — it's shown on the home page's "Event of the week" card when the event
+             falls on a Saturday. Drop the file in assets/img/events/.
    adventDay: (optional) the day of the December advent calendar this event
              belongs to — it shows as "???" until that day, then takes its real
              title and details from the ADVENT list further down.
@@ -340,6 +343,7 @@ const EVENTS = [
     time: '20:00 ST',
     title: 'Morbol Parade & Kugane Tower Speedrun',
     type: 'Event',
+    image: 'assets/img/events/2026-11-07.jpg',
     detail: 'Dress up in your funniest Morbol-inspired outfit (green and purple are mandatory) and join the parade, then race through Kugane Tower for a chance to win 1 MILLION GILS! Open to everyone, even non-FC members!'
   },
   {

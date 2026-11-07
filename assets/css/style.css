@@ -40,7 +40,15 @@ body {
   font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  /* Sticky footer: on short pages the footer sits at the bottom of the window
+     instead of floating mid-screen; on long pages it just follows the content. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
+body > main { flex: 1 0 auto; }
+body > footer { margin-top: auto; flex-shrink: 0; }
 
 img { max-width: 100%; display: block; }
 
@@ -991,6 +999,48 @@ input:focus {
   padding-top: 22px;
   color: #6a7492;
   font-size: .78rem;
+}
+
+/* --- Home: event of the week ------------------------------------------- */
+.feat-list { display: grid; gap: 28px; }
+.feat {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(200, 169, 94, .08);
+}
+.feat__media { background: var(--bg-alt); }
+.feat__media img { display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.feat__ph {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  height: 100%; min-height: 280px; padding: 24px; text-align: center;
+  font-family: var(--font-display); font-size: 1.3rem; color: var(--gold-bright);
+  background: radial-gradient(420px 300px at 50% 30%, rgba(200, 169, 94, .16), transparent 70%), var(--bg-alt);
+}
+.feat__ph small { font-family: var(--font-body); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.feat__body { display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: clamp(22px, 4vw, 44px); }
+.feat__tags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.feat__type {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px;
+  font-size: .72rem; font-weight: 600; color: var(--text);
+  border: 1px solid var(--pill-color); border-radius: 999px; background: rgba(var(--pill-rgb), .16);
+}
+.feat__today {
+  padding: 4px 11px; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: #12160f; background: var(--gold); border-radius: 999px;
+}
+.feat__title { margin: 0; font-size: clamp(1.5rem, 3.4vw, 2.2rem); color: var(--gold-bright); }
+.feat__when { margin: 0; color: var(--text); }
+.feat__when span { color: var(--muted); }
+.feat__detail { margin: 0; color: var(--muted); max-width: 52ch; }
+.feat__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+
+@media (max-width: 760px) {
+  .feat { grid-template-columns: 1fr; }
+  .feat__media img { max-height: 420px; }
 }
 
 /* --- Motion ------------------------------------------------------------- */

@@ -121,6 +121,55 @@
     }).join('');
   }
 
+  /* ---- Home: event of the week (the Saturday event) ---------------------
+     Shows whatever is on the calendar for this Saturday (today, if it is
+     Saturday). Give an event an `image` in data.js to show its poster. If
+     nothing single-day is scheduled that Saturday, the whole section hides. */
+  function renderFeaturedEvent() {
+    var section = $('[data-render="featured-event"]');
+    var host = section && $('[data-feat="list"]', section);
+    if (!host || typeof EVENTS === 'undefined') return;
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var sat = calAddDays(today, (6 - today.getDay() + 7) % 7);
+    var dateFmt = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    var list = calNormalize(EVENTS).filter(function (ev) {
+      return calSameDay(ev.start, sat) && calSameDay(ev.end, ev.start);
+    }).sort(function (a, b) { return String(a.time || '').localeCompare(String(b.time || '')); });
+
+    if (!list.length) { section.hidden = true; return; }
+
+    host.innerHTML = list.map(function (ev) {
+      var col = calTypeColor(ev.type);
+      var local = calLocalTime(ev);
+      var isToday = calSameDay(sat, today);
+      var media = ev.image
+        ? '<img src="' + esc(ev.image) + '" alt="' + esc(ev.title) + ' — event poster" loading="lazy">'
+        : '<div class="feat__ph"><span>' + esc(ev.title) + '</span><small>Poster coming soon</small></div>';
+      return '<article class="feat reveal">' +
+               '<div class="feat__media">' + media + '</div>' +
+               '<div class="feat__body">' +
+                 '<div class="feat__tags">' +
+                   (isToday ? '<span class="feat__today">Today!</span>' : '') +
+                   (ev.type ? '<span class="feat__type" style="--pill-color:' + col.hex + ';--pill-rgb:' + col.rgb + '">' +
+                      '<i class="cal__filter-dot"></i>' + esc(ev.type) + '</span>' : '') +
+                 '</div>' +
+                 '<h3 class="feat__title">' + esc(ev.title) + '</h3>' +
+                 '<p class="feat__when"><strong>' + esc(dateFmt.format(ev.start)) + '</strong>' +
+                   (ev.time ? ' · ' + esc(ev.time) + (local ? ' <span>(' + esc(local) + ' your time)</span>' : '') : '') + '</p>' +
+                 (ev.detail ? '<p class="feat__detail">' + esc(ev.detail) + '</p>' : '') +
+                 '<div class="feat__actions">' +
+                   '<a class="btn btn--solid" href="events.html">Full calendar</a>' +
+                   '<a class="btn btn--ghost" href="#" data-fc-href="discord">Join the Discord</a>' +
+                 '</div>' +
+               '</div>' +
+             '</article>';
+    }).join('');
+    section.hidden = false;
+  }
+
   /* ---- Events: Sprout Night content log --------------------------------- */
   function renderSproutNight() {
     var host = $('[data-render="sprout-night"]');
@@ -713,7 +762,7 @@
         }
       }
 
-      return { title: title, time: ev.time, type: ev.type, detail: detail, start: start, end: end };
+      return { title: title, time: ev.time, type: ev.type, detail: detail, image: ev.image, start: start, end: end };
     });
   }
 
@@ -1338,6 +1387,8 @@
     renderAllMembers();
     renderMaintenance();
     renderCalendar();
+    renderFeaturedEvent();
+    initFcBindings();   // re-run so the Discord link in the featured card is wired
     renderSproutNight();
     renderAdvent();
     initAdventSky();
