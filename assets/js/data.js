@@ -358,6 +358,7 @@ const EVENTS = [
     time: '20:00 ST',
     title: 'Aurum Vale Speedrun Challenge',
     type: 'Raid',
+    image: 'assets/img/events/2026-11-14.jpg',
     detail: 'Think you can conquer Aurum Vale faster than anyone else? Join our Morbol speedrun competition (rules will be dispensed by the officers before the event).'
   },
   {
